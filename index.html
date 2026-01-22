@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hiragana Master - UD Font Edition</title>
+    <title>Hiragana Master - UD Font Compact</title>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -22,7 +22,7 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            overflow: hidden; /* 全体スクロールを禁止 */
         }
 
         .app-card {
@@ -30,57 +30,51 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            margin: 2px;
-            border-radius: 10px;
-            padding: 4px;
-            border: 2px solid var(--border-pink);
+            margin: 0; /* マージンを削って全画面化 */
+            padding: 5px;
             box-sizing: border-box;
             min-height: 0;
         }
 
-        /* 上部パネルを圧縮 */
-        .control-panel {
-            padding: 2px;
+        /* 最上部の全選択ボタンを1行に */
+        .top-nav {
             display: flex;
-            flex-direction: column;
-            gap: 2px;
+            gap: 5px;
+            padding: 2px 5px;
+            border-bottom: 1px solid var(--soft-pink);
         }
 
-        .btn-row { display: flex; gap: 4px; }
+        /* 選択エリア：タイトルとチップを横に並べて高さを節約 */
+        .selector-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 2px 5px;
+            background: #fffafa;
+            border-bottom: 1px multisolid #eee;
+        }
+
+        .category-label {
+            font-size: 10px;
+            font-weight: bold;
+            color: var(--primary-pink);
+            white-space: nowrap;
+            min-width: 50px;
+        }
 
         .small-btn {
             font-size: 10px;
-            padding: 2px 8px;
+            padding: 1px 6px;
             border-radius: 4px;
             border: 1px solid #ccc;
-            background: #f8f8f8;
+            background: white;
             cursor: pointer;
-            font-weight: bold;
-            font-family: inherit;
-        }
-
-        .selector-section {
-            background: #fffafa;
-            border-radius: 6px;
-            padding: 4px;
-            margin-bottom: 4px;
-            border: 1px solid var(--border-pink);
-        }
-
-        .category-title {
-            font-size: 9px;
-            font-weight: bold;
-            color: var(--primary-pink);
-            display: block;
-            margin-bottom: 1px;
-            border-left: 3px solid var(--primary-pink);
-            padding-left: 4px;
         }
 
         .chips-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 2px;
+            gap: 3px;
         }
 
         .chip {
@@ -90,90 +84,85 @@
             background: white;
             border: 1px solid var(--border-pink);
             padding: 1px 6px;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 11px;
             cursor: pointer;
         }
 
-        .chip input { margin: 0; }
-        .chip:has(input:checked) {
-            background: var(--primary-pink);
-            color: white;
-        }
+        .chip input { margin: 0; width: 12px; height: 12px; }
+        .chip:has(input:checked) { background: var(--primary-pink); color: white; }
 
-        /* 表のエリア：ここがスクロールなしで収まるように調整 */
+        /* 表のエリア：ここを最大化 */
         .chart-area { 
             flex: 1; 
             display: flex; 
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: center; /* 中央に寄せる */
             background: #fafafa;
-            border-radius: 8px;
-            padding: 2px;
-            overflow: hidden; /* 縦5行を固定表示 */
+            overflow-y: auto;
+            padding: 5px 0;
         }
         
-        table { border-collapse: separate; border-spacing: 2px; }
+        table { border-collapse: separate; border-spacing: 3px; }
         td { 
-            border: 1px solid #ffdae0; width: 42px; height: 42px; text-align: center; border-radius: 5px; 
-            background: #fff; position: relative;
+            border: 1px solid #ffdae0; width: 44px; height: 44px; text-align: center; border-radius: 6px; 
+            background: #fff;
         }
         
-        .v-label { background: var(--soft-pink); color: var(--accent-pink); font-size: 10px; font-weight: bold; width: 18px; border: none; }
-        .kana-text { font-size: 20px; font-weight: bold; color: #333; display: block; line-height: 1; }
-        .romaji-text { font-size: 9px; color: var(--primary-pink); display: block; }
+        .v-label { background: var(--soft-pink); color: var(--accent-pink); font-size: 11px; font-weight: bold; width: 20px; border: none; }
+        .kana-text { font-size: 22px; font-weight: bold; color: #333; display: block; line-height: 1; }
+        .romaji-text { font-size: 10px; color: var(--primary-pink); display: block; }
 
-        .correct-highlight { 
-            border: 3px solid var(--accent-pink) !important; 
-            background-color: #fff0f5 !important; 
-        }
+        .correct-highlight { border: 3px solid var(--accent-pink) !important; background-color: #fff0f5 !important; }
 
-        /* クイズ部分をさらに上に詰める */
+        /* クイズ部分：高さを固定して下に配置 */
         .quiz-section {
-            height: 110px; 
+            height: 100px; 
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             background: white;
-            border-top: 1px solid var(--soft-pink);
+            border-top: 2px solid var(--soft-pink);
         }
 
-        #msg { font-size: 11px; font-weight: bold; height: 14px; margin-bottom: 2px; }
-        #q-text { font-size: 48px; color: var(--primary-pink); margin: -4px 0 4px 0; font-weight: bold; line-height: 1; }
+        #msg { font-size: 11px; font-weight: bold; height: 14px; margin-bottom: 2px; color: var(--accent-pink); }
+        #q-text { font-size: 44px; color: var(--primary-pink); margin: -5px 0 2px 0; font-weight: bold; line-height: 1; }
         
         .input-group {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             align-items: center;
         }
 
-        #ans-input { font-size: 18px; padding: 4px; width: 120px; text-align: center; border: 2px solid var(--border-pink); border-radius: 12px; outline: none; font-family: inherit; }
+        #ans-input { font-size: 18px; padding: 5px; width: 130px; text-align: center; border: 2px solid var(--border-pink); border-radius: 15px; outline: none; }
         
-        .main-btn { padding: 6px 15px; font-size: 14px; font-weight: bold; background: var(--primary-pink); color: white; border: none; border-radius: 10px; cursor: pointer; font-family: inherit; }
+        .main-btn { padding: 8px 18px; font-size: 15px; font-weight: bold; background: var(--primary-pink); color: white; border: none; border-radius: 12px; cursor: pointer; }
         #next-btn { display: none; background: #4caf50; }
     </style>
 </head>
 <body>
 
 <div class="app-card">
-    <div class="control-panel">
-        <div class="btn-row">
-            <button class="small-btn" onclick="setAll(true)">All ON</button>
-            <button class="small-btn" onclick="setAll(false)">All OFF</button>
-            <button class="small-btn" onclick="setOnly('basic')">Step 1</button>
-            <button class="small-btn" onclick="setOnly('contracted')">Step 2</button>
-            <button class="small-btn" onclick="setOnly('foreign')">Step 3</button>
-        </div>
+    <div class="top-nav">
+        <button class="small-btn" onclick="setAll(true)">All ON</button>
+        <button class="small-btn" onclick="setAll(false)">All OFF</button>
+        <button class="small-btn" style="margin-left:auto" onclick="setOnly('basic')">Step 1</button>
+        <button class="small-btn" onclick="setOnly('contracted')">Step 2</button>
+        <button class="small-btn" onclick="setOnly('foreign')">Step 3</button>
     </div>
 
-    <div class="selector-section">
-        <span class="category-title">STEP 1: BASIC</span>
+    <div class="selector-row">
+        <span class="category-label">STEP 1</span>
         <div id="chips-basic" class="chips-container"></div>
-        <span class="category-title">STEP 2: COMBINED</span>
+    </div>
+    <div class="selector-row">
+        <span class="category-label">STEP 2</span>
         <div id="chips-contracted" class="chips-container"></div>
-        <span class="category-title">STEP 3: SPECIAL</span>
+    </div>
+    <div class="selector-row">
+        <span class="category-label">STEP 3</span>
         <div id="chips-foreign" class="chips-container"></div>
     </div>
 
@@ -185,7 +174,7 @@
         <div id="msg"></div>
         <div id="q-text">?</div>
         <div class="input-group">
-            <input type="text" id="ans-input" placeholder="Romaji" autocomplete="off">
+            <input type="text" id="ans-input" placeholder="Type..." autocomplete="off">
             <button id="ok-btn" class="main-btn" onclick="handleCheck()">OK (Enter)</button>
             <button id="next-btn" class="main-btn" onclick="handleNext()">NEXT</button>
         </div>
@@ -195,21 +184,21 @@
 <script>
     const gameData = {
         basic: [
-            { label: "あ", data: [[0,0,"あ","a"],[0,1,"い","i"],[0,2,"う","u"],[0,3,"え","e"],[0,4,"お","o"]] },
-            { label: "か", data: [[1,0,"か","ka"],[1,1,"き","ki"],[1,2,"く","ku"],[1,3,"け","ke"],[1,4,"こ","ko"]] },
-            { label: "さ", data: [[2,0,"さ","sa"],[2,1,"し","shi"],[2,2,"す","su"],[2,3,"せ","se"],[2,4,"そ","so"]] },
-            { label: "た", data: [[3,0,"た","ta"],[3,1,"ち","chi"],[3,2,"つ","tsu"],[3,3,"て","te"],[3,4,"と","to"]] },
-            { label: "な", data: [[4,0,"な","na"],[4,1,"に","ni"],[4,2,"ぬ","nu"],[4,3,"ね","ne"],[4,4,"の","no"]] },
-            { label: "は", data: [[5,0,"は","ha"],[5,1,"ひ","hi"],[5,2,"ふ","fu"],[5,3,"へ","he"],[5,4,"ほ","ho"]] },
-            { label: "ま", data: [[6,0,"ま","ma"],[6,1,"み","mi"],[6,2,"む","mu"],[6,3,"め","me"],[6,4,"も","mo"]] },
-            { label: "や", data: [[7,0,"や","ya"],[7,2,"ゆ","yu"],[7,4,"よ","yo"]] },
-            { label: "ら", data: [[8,0,"ら","ra"],[8,1,"り","ri"],[8,2,"る","ru"],[8,3,"れ","re"],[8,4,"ろ","ro"]] },
-            { label: "わ", data: [[9,0,"わ","wa"],[9,2,"を","wo"],[9,4,"ん","nn"]] },
-            { label: "が", data: [[11,0,"が","ga"],[11,1,"ぎ","gi"],[11,2,"ぐ","gu"],[11,3,"げ","ge"],[11,4,"ご","go"]] },
-            { label: "ざ", data: [[12,0,"ざ","za"],[12,1,"じ","ji"],[12,2,"ず","zu"],[12,3,"ぜ","ze"],[12,4,"ぞ","zo"]] },
-            { label: "だ", data: [[13,0,"だ","da"],[13,1,"ぢ","ji"],[13,2,"づ","zu"],[13,3,"で","de"],[13,4,"ど","do"]] },
-            { label: "ば", data: [[14,0,"ば","ba"],[14,1,"び","bi"],[14,2,"ぶ","bu"],[14,3,"べ","be"],[14,4,"ぼ","bo"]] },
-            { label: "ぱ", data: [[15,0,"ぱ","pa"],[15,1,"ぴ","pi"],[15,2,"ぷ","pu"],[15,3,"ぺ","pe"],[15,4,"ぽ","po"]] }
+            { label: "あ行", data: [[0,0,"あ","a"],[0,1,"い","i"],[0,2,"う","u"],[0,3,"え","e"],[0,4,"お","o"]] },
+            { label: "か行", data: [[1,0,"か","ka"],[1,1,"き","ki"],[1,2,"く","ku"],[1,3,"け","ke"],[1,4,"こ","ko"]] },
+            { label: "さ行", data: [[2,0,"さ","sa"],[2,1,"し","shi"],[2,2,"す","su"],[2,3,"せ","se"],[2,4,"そ","so"]] },
+            { label: "た行", data: [[3,0,"た","ta"],[3,1,"ち","chi"],[3,2,"つ","tsu"],[3,3,"て","te"],[3,4,"と","to"]] },
+            { label: "な行", data: [[4,0,"な","na"],[4,1,"に","ni"],[4,2,"ぬ","nu"],[4,3,"ね","ne"],[4,4,"の","no"]] },
+            { label: "は行", data: [[5,0,"は","ha"],[5,1,"ひ","hi"],[5,2,"ふ","fu"],[5,3,"へ","he"],[5,4,"ほ","ho"]] },
+            { label: "ま行", data: [[6,0,"ま","ma"],[6,1,"み","mi"],[6,2,"む","mu"],[6,3,"め","me"],[6,4,"も","mo"]] },
+            { label: "や行", data: [[7,0,"や","ya"],[7,2,"ゆ","yu"],[7,4,"よ","yo"]] },
+            { label: "ら行", data: [[8,0,"ら","ra"],[8,1,"り","ri"],[8,2,"る","ru"],[8,3,"れ","re"],[8,4,"ろ","ro"]] },
+            { label: "わ行", data: [[9,0,"わ","wa"],[9,2,"を","wo"],[9,4,"ん","nn"]] },
+            { label: "が行", data: [[11,0,"が","ga"],[11,1,"ぎ","gi"],[11,2,"ぐ","gu"],[11,3,"げ","ge"],[11,4,"ご","go"]] },
+            { label: "ざ行", data: [[12,0,"ざ","za"],[12,1,"じ","ji"],[12,2,"ず","zu"],[12,3,"ぜ","ze"],[12,4,"ぞ","zo"]] },
+            { label: "だ行", data: [[13,0,"だ","da"],[13,1,"ぢ","ji"],[13,2,"づ","zu"],[13,3,"で","de"],[13,4,"ど","do"]] },
+            { label: "ば行", data: [[14,0,"ば","ba"],[14,1,"び","bi"],[14,2,"ぶ","bu"],[14,3,"べ","be"],[14,4,"ぼ","bo"]] },
+            { label: "ぱ行", data: [[15,0,"ぱ","pa"],[15,1,"ぴ","pi"],[15,2,"ぷ","pu"],[15,3,"ぺ","pe"],[15,4,"ぽ","po"]] }
         ],
         contracted: [
             { label: "きゃ", data: [[0,0,"きゃ","kya"],[0,2,"きゅ","kyu"],[0,4,"きょ","kyo"]] },
@@ -225,14 +214,9 @@
             { label: "ぴゃ", data: [[11,0,"ぴゃ","pya"],[11,2,"ぴゅ","pyu"],[11,4,"ぴょ","pyo"]] }
         ],
         foreign: [
-            { label: "ふぁ", data: [[0,0,"ふぁ","fa"],[0,1,"ふぃ","fi"],[0,3,"ふぇ","fe"],[0,4,"ふぉ","fo"]] },
-            { label: "てぃ", data: [[1,1,"てぃ","thi"]] },
-            { label: "ちぇ", data: [[2,3,"ちぇ","che"]] },
-            { label: "でぃ", data: [[3,1,"でぃ","dhi"],[3,2,"でゅ","dhu"]] },
-            { label: "じぇ", data: [[5,3,"じぇ","je"]] },
-            { label: "しぇ", data: [[6,3,"しぇ","she"]] },
-            { label: "ゔぁ", data: [[8,0,"ゔぁ","va"],[8,1,"ゔぃ","vi"],[8,2,"ゔ","vu"],[8,3,"ゔぇ","ve"],[8,4,"ゔぉ","vo"]] },
-            { label: "うぃ", data: [[9,1,"うぃ","wi"],[9,3,"うぇ","we"],[9,4,"うぉ","who"]] }
+            { label: "ふぁ/ゔ", data: [[0,0,"ふぁ","fa"],[0,1,"ふぃ","fi"],[0,3,"ふぇ","fe"],[0,4,"ふぉ","fo"],[8,0,"ゔぁ","va"],[8,1,"ゔぃ","vi"],[8,2,"ゔ","vu"],[8,3,"ゔぇ","ve"],[8,4,"ゔぉ","vo"]] },
+            { label: "てぃ/でぃ", data: [[1,1,"てぃ","thi"],[3,1,"でぃ","dhi"],[3,2,"でゅ","dhu"]] },
+            { label: "うぃ/うえ", data: [[9,1,"うぃ","wi"],[9,3,"うぇ","we"],[9,4,"うぉ","who"]] }
         ]
     };
 
