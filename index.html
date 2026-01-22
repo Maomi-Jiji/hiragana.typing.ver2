@@ -107,16 +107,18 @@
             border-color: var(--primary-pink);
         }
 
-        .chart-area { 
-            flex: 1; 
-            overflow-y: auto; 
-            display: flex; 
-            flex-direction: column;
-            align-items: center;
-            background: #fafafa;
-            border-radius: 12px;
-            padding: 15px 0;
-        }
+       .chart-area { 
+    flex: 1; 
+    overflow-y: auto; 
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center;  ← もしこれがあれば削除 */
+    justify-content: flex-start; /* 表を上に寄せる */
+    background: #fafafa;
+    border-radius: 12px;
+    padding: 2px 0; /* 15pxから2pxに減らして、上の隙間をギリギリまで詰める */
+}
         
         table { border-collapse: separate; border-spacing: 4px; margin-bottom: 20px; }
         td { 
@@ -366,3 +368,4 @@
 </script>
 </body>
 </html>
+
