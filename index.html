@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hiragana Master - Max Expansion</title>
+    <title>Hiragana Master - Final Version</title>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -29,8 +29,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            margin: 0; 
-            padding: 0; 
+            margin: 0; padding: 0;
             box-sizing: border-box;
             min-height: 0;
         }
@@ -46,13 +45,14 @@
         .btn-row { display: flex; gap: 4px; padding-top: 2px; }
 
         .small-btn {
-            font-size: 10px;
-            padding: 2px 8px;
+            font-size: 9px;
+            padding: 2px 5px;
             border-radius: 4px;
             border: 1px solid #ccc;
             background: #f8f8f8;
             font-weight: bold;
             cursor: pointer;
+            white-space: nowrap;
         }
 
         .selector-section {
@@ -84,26 +84,26 @@
         }
         .chip:has(input:checked) { background: var(--primary-pink); color: white; }
 
+        /* チャートエリア（スクロール可能） */
         .chart-area { 
             flex: 2; 
-            overflow-y: auto; 
-            display: flex; 
-            flex-direction: column;
-            align-items: center;
-            justify-content: center; 
-            background: #f3f3f3; 
-            padding: 5px 0;
+            overflow: auto; 
+            display: block; 
+            background: #f0f0f0; 
+            padding: 10px;
             min-height: 0;
+            text-align: center;
         }
 
-        .chart-area table {
+        .chart-area table { 
             border-collapse: separate; 
-            border-spacing: 4px;
+            border-spacing: 4px; 
+            margin: 0 auto; 
         }
 
         td { 
             border: 1px solid #ffdae0; 
-            width: 54px; height: 50px; /* 少しだけ高さを詰めました */
+            width: 54px; height: 50px; 
             text-align: center; border-radius: 8px; background: #fff;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
@@ -138,9 +138,9 @@
         <div class="btn-row">
             <button class="small-btn" onclick="setAll(true)">All ON</button>
             <button class="small-btn" onclick="setAll(false)">All OFF</button>
-            <button class="small-btn" onclick="setOnly('basic')">Step 1</button>
-            <button class="small-btn" onclick="setOnly('contracted')">Step 2</button>
-            <button class="small-btn" onclick="setOnly('foreign')">Step 3</button>
+            <button class="small-btn" onclick="setOnly('basic')">STEP 1: Basic</button>
+            <button class="small-btn" onclick="setOnly('contracted')">STEP 2: Combined</button>
+            <button class="small-btn" onclick="setOnly('foreign')">STEP 3: Foreign</button>
         </div>
     </div>
 
@@ -288,29 +288,43 @@
 
     function handleCheck() {
         const val = document.getElementById('ans-input').value.toLowerCase().trim();
+        if(!val) return; // 空欄なら何もしない
+        
         const kana = activeQ.data[2];
         const romaji = activeQ.data[3];
         const ok = (val === romaji) || (kana === 'し' && val === 'shi') || (kana === 'ち' && val === 'chi') || (kana === 'つ' && val === 'tsu') || (kana === 'ふ' && val === 'fu') || (kana === 'じ' && (val === 'zi' || val === 'ji')) || (kana === 'を' && val === 'o');
+        
         const cell = document.getElementById(`cell-${activeQ.cat}-${activeQ.data[0]}-${activeQ.data[1]}`);
         if (ok) {
             document.getElementById('msg').innerText = 'Correct! ✨';
             document.getElementById('ans-input').disabled = true;
             document.getElementById('ok-btn').style.display = 'none';
             document.getElementById('next-btn').style.display = 'inline-block';
-            document.getElementById('next-btn').focus();
-            if (cell) cell.classList.add('correct-highlight');
+            if (cell) {
+                cell.classList.add('correct-highlight');
+                cell.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+            }
         } else {
             document.getElementById('msg').innerText = 'Check the chart! 💡';
-            if (cell) cell.classList.add('correct-highlight');
+            if (cell) {
+                cell.classList.add('correct-highlight');
+                cell.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+            }
         }
     }
 
+    // InputフィールドでのEnterキー制御
     document.getElementById('ans-input').onkeydown = (e) => {
         if (e.key === 'Enter') {
-            if (document.getElementById('next-btn').style.display === 'none') handleCheck();
-            else handleNext();
+            e.preventDefault(); // 予期せぬ挙動を防ぐ
+            if (document.getElementById('next-btn').style.display === 'none') {
+                handleCheck();
+            } else {
+                handleNext();
+            }
         }
     };
+
     initApp();
 </script>
 </body>
