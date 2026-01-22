@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hiragana Master - Expand Edition</title>
+    <title>Hiragana Master - Perfect Layout</title>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -17,50 +17,50 @@
         body { 
             font-family: "UD Digital Kyokasho N-R", "UD デジタル 教科書体 N-R", "BIZ UDPGothic", "Zen Maru Gothic", sans-serif; 
             background-color: var(--soft-pink); 
-            margin: 0; padding: 0;
+            margin: 0; 
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
-        /* 【修正】外枠のパディングを完全に排除して天井に張り付かせる */
         .app-card {
             background: white;
             flex: 1;
             display: flex;
             flex-direction: column;
-            margin: 0; 
-            padding: 0; /* 全方位0に */
+            margin: 2px;
+            border-radius: 10px;
+            padding: 4px;
+            border: 2px solid var(--border-pink);
             box-sizing: border-box;
             min-height: 0;
         }
 
-        /* ボタンエリア：天井との隙間を最小限(1px)に */
         .control-panel {
-            padding: 1px 5px 0 5px; 
+            padding: 2px 5px;
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 4px;
         }
 
-        .btn-row { display: flex; gap: 4px; }
+        .btn-row { display: flex; gap: 5px; }
 
         .small-btn {
             font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 4px;
+            padding: 4px 10px;
+            border-radius: 6px;
             border: 1px solid #ccc;
             background: #f8f8f8;
-            font-weight: bold;
             cursor: pointer;
+            font-weight: bold;
         }
 
         .selector-section {
             background: #fffafa;
-            border-radius: 6px;
-            padding: 4px 6px;
-            margin: 2px; /* 少しだけ外枠から離す */
+            border-radius: 8px;
+            padding: 8px;
+            margin-bottom: 5px;
             border: 1px solid var(--border-pink);
         }
 
@@ -69,54 +69,64 @@
             font-weight: bold;
             color: var(--primary-pink);
             display: block;
-            margin-bottom: 2px;
+            margin-bottom: 3px;
             border-left: 3px solid var(--primary-pink);
-            padding-left: 4px;
-            line-height: 1;
+            padding-left: 5px;
         }
 
-        .chips-container { display: flex; flex-wrap: wrap; gap: 3px; }
+        .chips-container { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 5px; }
 
         .chip {
-            display: flex; align-items: center; gap: 2px;
-            background: white; border: 1px solid var(--border-pink);
-            padding: 2px 8px; border-radius: 12px;
-            font-size: 11px; cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            background: white;
+            border: 1px solid var(--border-pink);
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
         }
-        .chip:has(input:checked) { background: var(--primary-pink); color: white; }
 
-        /* 【修正】表エリア：空いたスペースで「あいうえお」を広く見せる */
+        .chip:has(input:checked) { background: var(--primary-pink); color: white; border-color: var(--primary-pink); }
+
+        /* 表エリア：上寄せを確定し、隙間をゼロにする */
         .chart-area { 
             flex: 1; 
             overflow-y: auto; 
             display: flex; 
             flex-direction: column;
             align-items: center;
-            justify-content: center; /* 中央に配置 */
+            justify-content: flex-start !important; 
             background: #fafafa;
-            padding: 5px 0;
+            border-radius: 8px;
+            padding: 0;
         }
 
         .chart-area table {
+            margin-top: 0px; 
             border-collapse: separate; 
-            border-spacing: 3px;
+            border-spacing: 2px;
         }
 
-        /* 【修正】マス目を 46px に拡大 */
         td { 
             border: 1px solid #ffdae0; 
-            width: 46px; height: 46px; 
-            text-align: center; border-radius: 6px; background: #fff;
+            width: 42px; 
+            height: 42px; 
+            text-align: center; 
+            border-radius: 6px; 
+            background: #fff;
         }
         
-        .v-label { background: var(--soft-pink); color: var(--accent-pink); font-size: 11px; font-weight: bold; width: 20px; border: none; }
-        .kana-text { font-size: 26px; font-weight: bold; color: #333; display: block; line-height: 1; }
-        .romaji-text { font-size: 10px; color: var(--primary-pink); display: block; margin-top: -1px; }
+        .v-label { background: var(--soft-pink); color: var(--accent-pink); font-size: 11px; font-weight: bold; width: 22px; border: none; }
+        .kana-text { font-size: 20px; font-weight: bold; color: #333; display: block; line-height: 1.1; }
+        .romaji-text { font-size: 9px; color: var(--primary-pink); display: block; }
 
         .correct-highlight { border: 3px solid var(--accent-pink) !important; background-color: #fff0f5 !important; }
 
+        /* クイズ部分：縦に並べて操作しやすく */
         .quiz-section {
-            padding: 5px 0;
+            padding: 8px 0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -124,11 +134,11 @@
             border-top: 2px solid var(--soft-pink);
         }
 
-        #msg { font-size: 12px; font-weight: bold; height: 14px; margin-bottom: 2px; color: var(--accent-pink); }
-        #q-text { font-size: 45px; color: var(--primary-pink); margin: 0; font-weight: bold; line-height: 0.9; }
-        #ans-input { font-size: 20px; padding: 5px; width: 150px; text-align: center; border: 2px solid var(--border-pink); border-radius: 15px; outline: none; margin-top: 2px; }
+        #msg { font-size: 13px; font-weight: bold; height: 18px; margin-bottom: 2px; color: var(--accent-pink); }
+        #q-text { font-size: 48px; color: var(--primary-pink); margin: 0; font-weight: bold; line-height: 1; }
+        #ans-input { font-size: 22px; padding: 6px; width: 160px; text-align: center; border: 2px solid var(--border-pink); border-radius: 20px; outline: none; margin-top: 5px; }
         
-        .main-btn { padding: 6px 40px; font-size: 18px; font-weight: bold; background: var(--primary-pink); color: white; border: none; border-radius: 12px; cursor: pointer; margin-top: 5px; }
+        .main-btn { padding: 8px 40px; font-size: 18px; font-weight: bold; background: var(--primary-pink); color: white; border: none; border-radius: 15px; cursor: pointer; margin-top: 8px; }
         #next-btn { display: none; background: #4caf50; }
     </style>
 </head>
@@ -161,14 +171,13 @@
     <div class="quiz-section">
         <div id="msg"></div>
         <div id="q-text">?</div>
-        <input type="text" id="ans-input" placeholder="Type..." autocomplete="off">
+        <input type="text" id="ans-input" placeholder="Romaji..." autocomplete="off">
         <button id="ok-btn" class="main-btn" onclick="handleCheck()">OK</button>
         <button id="next-btn" class="main-btn" onclick="handleNext()">NEXT</button>
     </div>
 </div>
 
 <script>
-    /* （JavaScriptは変更なし：全データを維持しています） */
     const gameData = {
         basic: [
             { label: "あ", data: [[0,0,"あ","a"],[0,1,"い","i"],[0,2,"う","u"],[0,3,"え","e"],[0,4,"お","o"]] },
@@ -240,7 +249,10 @@
         const chart = document.getElementById('main-chart');
         chart.innerHTML = "";
         const selected = getSelected();
-        if (selected.length === 0) return;
+        if (selected.length === 0) {
+            chart.innerHTML = "<p style='padding:10px; color:#999;'>Select sounds.</p>";
+            return;
+        }
         const categories = [...new Set(selected.map(s => s.cat))];
         categories.forEach(cat => {
             const catItems = selected.filter(s => s.cat === cat).flatMap(s => s.data);
