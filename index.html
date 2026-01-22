@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hiragana Master - Final Version</title>
+    <title>Hiragana Master - Flexible Input</title>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,7 +11,6 @@
             --soft-pink: #fff0f5;
             --border-pink: #ffb6c1;
             --accent-pink: #ff1493;
-            --text-color: #5d4037;
         }
 
         body { 
@@ -29,52 +28,31 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            margin: 0; padding: 0;
-            box-sizing: border-box;
             min-height: 0;
         }
 
-        .control-panel {
-            padding: 0px 5px; 
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            background: #fff;
-        }
-
-        .btn-row { display: flex; gap: 4px; padding-top: 2px; }
+        .control-panel { padding: 2px 5px; background: #fff; }
+        .btn-row { display: flex; gap: 4px; margin-bottom: 2px; }
 
         .small-btn {
-            font-size: 9px;
-            padding: 2px 5px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            background: #f8f8f8;
-            font-weight: bold;
-            cursor: pointer;
-            white-space: nowrap;
+            font-size: 9px; padding: 4px 6px; border-radius: 4px;
+            border: 1px solid #ccc; background: #f8f8f8;
+            font-weight: bold; cursor: pointer;
         }
 
         .selector-section {
-            background: #fffafa;
-            border-radius: 6px;
-            padding: 3px 6px;
-            margin: 2px 4px;
+            background: #fffafa; border-radius: 6px;
+            padding: 4px 6px; margin: 0 4px 4px 4px;
             border: 1px solid var(--border-pink);
         }
 
         .category-title {
-            font-size: 9px;
-            font-weight: bold;
-            color: var(--primary-pink);
-            display: block;
-            margin-bottom: 1px;
-            border-left: 3px solid var(--primary-pink);
-            padding-left: 4px;
-            line-height: 1.2;
+            font-size: 9px; font-weight: bold; color: var(--primary-pink);
+            display: block; border-left: 3px solid var(--primary-pink);
+            padding-left: 4px; margin-bottom: 2px;
         }
 
-        .chips-container { display: flex; flex-wrap: wrap; gap: 2px; margin-bottom: 2px; }
+        .chips-container { display: flex; flex-wrap: wrap; gap: 2px; margin-bottom: 4px; }
 
         .chip {
             display: flex; align-items: center; gap: 2px;
@@ -84,21 +62,18 @@
         }
         .chip:has(input:checked) { background: var(--primary-pink); color: white; }
 
-        /* チャートエリア（スクロール可能） */
         .chart-area { 
             flex: 2; 
             overflow: auto; 
-            display: block; 
-            background: #f0f0f0; 
+            background: #f3f3f3; 
             padding: 10px;
-            min-height: 0;
-            text-align: center;
+            -webkit-overflow-scrolling: touch;
         }
 
-        .chart-area table { 
+        .master-table { 
             border-collapse: separate; 
             border-spacing: 4px; 
-            margin: 0 auto; 
+            margin: 0 auto;
         }
 
         td { 
@@ -106,28 +81,30 @@
             width: 54px; height: 50px; 
             text-align: center; border-radius: 8px; background: #fff;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 0;
         }
-        
-        .v-label { background: var(--soft-pink); color: var(--accent-pink); font-size: 12px; font-weight: bold; width: 22px; border: none; box-shadow: none; }
+
+        .empty-cell { border: none; background: transparent; box-shadow: none; width: 54px; }
+        .v-label { background: var(--soft-pink); color: var(--accent-pink); font-size: 12px; font-weight: bold; width: 30px; border: none; box-shadow: none; }
         .kana-text { font-size: 32px; font-weight: bold; color: #333; display: block; line-height: 1; }
-        .romaji-text { font-size: 11px; color: var(--primary-pink); display: block; margin-top: 0px; }
+        .romaji-text { font-size: 11px; color: var(--primary-pink); display: block; }
 
         .correct-highlight { border: 4px solid var(--accent-pink) !important; background-color: #fff0f5 !important; }
 
         .quiz-section {
-            padding: 4px 0 8px 0;
+            padding: 5px 0 10px 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             background: white;
-            border-top: 2px solid var(--soft-pink);
+            border-top: 3px solid var(--soft-pink);
         }
 
-        #msg { font-size: 12px; font-weight: bold; height: 14px; margin-bottom: 2px; color: var(--accent-pink); }
-        #q-text { font-size: 48px; color: var(--primary-pink); margin: 0; font-weight: bold; line-height: 0.9; }
-        #ans-input { font-size: 22px; padding: 6px; width: 160px; text-align: center; border: 2px solid var(--border-pink); border-radius: 15px; outline: none; margin-top: 2px; }
+        #msg { font-size: 13px; font-weight: bold; height: 16px; margin-bottom: 2px; color: var(--accent-pink); }
+        #q-text { font-size: 50px; color: var(--primary-pink); margin: 0; font-weight: bold; line-height: 0.9; }
+        #ans-input { font-size: 24px; padding: 8px; width: 180px; text-align: center; border: 3px solid var(--border-pink); border-radius: 15px; outline: none; }
         
-        .main-btn { padding: 8px 50px; font-size: 20px; font-weight: bold; background: var(--primary-pink); color: white; border: none; border-radius: 15px; cursor: pointer; margin-top: 6px; }
+        .main-btn { padding: 10px 60px; font-size: 22px; font-weight: bold; background: var(--primary-pink); color: white; border: none; border-radius: 15px; cursor: pointer; margin-top: 8px; }
         #next-btn { display: none; background: #4caf50; }
     </style>
 </head>
@@ -153,14 +130,16 @@
         <div id="chips-foreign" class="chips-container"></div>
     </div>
 
-    <div class="chart-area">
+    <div class="chart-area" id="scroll-box">
         <div id="main-chart"></div>
     </div>
 
     <div class="quiz-section">
         <div id="msg"></div>
         <div id="q-text">?</div>
-        <input type="text" id="ans-input" placeholder="Type Romaji..." autocomplete="off">
+        <div style="margin-top:5px;">
+            <input type="text" id="ans-input" placeholder="Romaji..." autocomplete="off">
+        </div>
         <button id="ok-btn" class="main-btn" onclick="handleCheck()">OK</button>
         <button id="next-btn" class="main-btn" onclick="handleNext()">NEXT</button>
     </div>
@@ -179,32 +158,32 @@
             { label: "や", data: [[7,0,"や","ya"],[7,2,"ゆ","yu"],[7,4,"よ","yo"]] },
             { label: "ら", data: [[8,0,"ら","ra"],[8,1,"り","ri"],[8,2,"る","ru"],[8,3,"れ","re"],[8,4,"ろ","ro"]] },
             { label: "わ", data: [[9,0,"わ","wa"],[9,2,"を","wo"],[9,4,"ん","nn"]] },
-            { label: "が", data: [[11,0,"が","ga"],[11,1,"ぎ","gi"],[11,2,"ぐ","gu"],[11,3,"げ","ge"],[11,4,"ご","go"]] },
-            { label: "ざ", data: [[12,0,"ざ","za"],[12,1,"じ","ji"],[12,2,"ず","zu"],[12,3,"ぜ","ze"],[12,4,"ぞ","zo"]] },
-            { label: "だ", data: [[13,0,"だ","da"],[13,1,"ぢ","ji"],[13,2,"づ","zu"],[13,3,"で","de"],[13,4,"ど","do"]] },
-            { label: "ば", data: [[14,0,"ば","ba"],[14,1,"び","bi"],[14,2,"ぶ","bu"],[14,3,"べ","be"],[14,4,"ぼ","bo"]] },
-            { label: "ぱ", data: [[15,0,"ぱ","pa"],[15,1,"ぴ","pi"],[15,2,"ぷ","pu"],[15,3,"ぺ","pe"],[15,4,"ぽ","po"]] }
+            { label: "が", data: [[10,0,"が","ga"],[10,1,"ぎ","gi"],[10,2,"ぐ","gu"],[10,3,"げ","ge"],[10,4,"ご","go"]] },
+            { label: "ざ", data: [[11,0,"ざ","za"],[11,1,"じ","ji"],[11,2,"ず","zu"],[11,3,"ぜ","ze"],[11,4,"ぞ","zo"]] },
+            { label: "だ", data: [[12,0,"だ","da"],[12,1,"ぢ","ji"],[12,2,"づ","zu"],[12,3,"で","de"],[12,4,"ど","do"]] },
+            { label: "ば", data: [[13,0,"ば","ba"],[13,1,"び","bi"],[13,2,"ぶ","bu"],[13,3,"べ","be"],[13,4,"ぼ","bo"]] },
+            { label: "ぱ", data: [[14,0,"ぱ","pa"],[14,1,"ぴ","pi"],[14,2,"ぷ","pu"],[14,3,"ぺ","pe"],[14,4,"ぽ","po"]] }
         ],
         contracted: [
-            { label: "きゃ", data: [[0,0,"きゃ","kya"],[0,2,"きゅ","kyu"],[0,4,"きょ","kyo"]] },
-            { label: "しゃ", data: [[1,0,"しゃ","sha"],[1,2,"しゅ","shu"],[1,4,"しょ","sho"]] },
-            { label: "ちゃ", data: [[2,0,"ちゃ","cha"],[2,2,"ちゅ","chu"],[2,4,"ちょ","cho"]] },
-            { label: "にゃ", data: [[3,0,"にゃ","nya"],[3,2,"にゅ","nyu"],[3,4,"にょ","nyo"]] },
-            { label: "ひゃ", data: [[4,0,"ひゃ","hya"],[4,2,"ひゅ","hyu"],[4,4,"ひょ","hyo"]] },
-            { label: "みゃ", data: [[5,0,"みゃ","mya"],[5,2,"みゅ","myu"],[5,4,"みょ","myo"]] },
-            { label: "りゃ", data: [[6,0,"りゃ","rya"],[6,2,"りゅ","ryu"],[6,4,"りょ","ryo"]] },
-            { label: "ぎゃ", data: [[8,0,"ぎゃ","gya"],[8,2,"ぎゅ","gyu"],[8,4,"ぎょ","gyo"]] },
-            { label: "じゃ", data: [[9,0,"じゃ","ja"],[9,2,"じゅ","ju"],[9,4,"じょ","jo"]] },
-            { label: "びゃ", data: [[10,0,"びゃ","bya"],[10,2,"びゅ","byu"],[10,4,"びょ","byo"]] },
-            { label: "ぴゃ", data: [[11,0,"ぴゃ","pya"],[11,2,"ぴゅ","pyu"],[11,4,"ぴょ","pyo"]] }
+            { label: "きゃ", data: [[20,0,"きゃ","kya"],[20,2,"きゅ","kyu"],[20,4,"きょ","kyo"]] },
+            { label: "しゃ", data: [[21,0,"しゃ","sha"],[21,2,"しゅ","shu"],[21,4,"しょ","sho"]] },
+            { label: "ちゃ", data: [[22,0,"ちゃ","cha"],[22,2,"ちゅ","chu"],[22,4,"ちょ","cho"]] },
+            { label: "にゃ", data: [[23,0,"にゃ","nya"],[23,2,"にゅ","nyu"],[23,4,"にょ","nyo"]] },
+            { label: "ひゃ", data: [[24,0,"ひゃ","hya"],[24,2,"ひゅ","hyu"],[24,4,"ひょ","hyo"]] },
+            { label: "みゃ", data: [[25,0,"みゃ","mya"],[25,2,"みゅ","myu"],[25,4,"みょ","myo"]] },
+            { label: "りゃ", data: [[26,0,"りゃ","rya"],[26,2,"りゅ","ryu"],[26,4,"りょ","ryo"]] },
+            { label: "ぎゃ", data: [[27,0,"ぎゃ","gya"],[27,2,"ぎゅ","gyu"],[27,4,"ぎょ","gyo"]] },
+            { label: "じゃ", data: [[28,0,"じゃ","ja"],[28,2,"じゅ","ju"],[28,4,"じょ","jo"]] },
+            { label: "びゃ", data: [[29,0,"びゃ","bya"],[29,2,"びゅ","byu"],[29,4,"びょ","byo"]] },
+            { label: "ぴゃ", data: [[30,0,"ぴゃ","pya"],[30,2,"ぴゅ","pyu"],[30,4,"ぴょ","pyo"]] }
         ],
         foreign: [
-            { label: "ふぁ", data: [[0,0,"ふぁ","fa"],[0,1,"ふぃ","fi"],[0,3,"ふぇ","fe"],[0,4,"ふぉ","fo"]] },
-            { label: "てぃ", data: [[1,1,"てぃ","thi"]] },
-            { label: "ちぇ", data: [[2,3,"ちぇ","che"]] },
-            { label: "でぃ", data: [[3,1,"でぃ","dhi"],[3,2,"でゅ","dhu"]] },
-            { label: "ゔぁ", data: [[8,0,"ゔぁ","va"],[8,1,"ゔぃ","vi"],[8,2,"ゔ","vu"],[8,3,"ゔぇ","ve"],[8,4,"ゔぉ","vo"]] },
-            { label: "うぃ", data: [[9,1,"うぃ","wi"],[9,3,"うぇ","we"],[9,4,"うぉ","who"]] }
+            { label: "ふぁ", data: [[40,0,"ふぁ","fa"],[40,1,"ふぃ","fi"],[40,3,"ふぇ","fe"],[40,4,"ふぉ","fo"]] },
+            { label: "てぃ", data: [[41,1,"てぃ","thi"]] },
+            { label: "ちぇ", data: [[42,3,"ちぇ","che"]] },
+            { label: "でぃ", data: [[43,1,"でぃ","dhi"],[43,2,"でゅ","dhu"]] },
+            { label: "ゔぁ", data: [[44,0,"ゔぁ","va"],[44,1,"ゔぃ","vi"],[44,2,"ゔ","vu"],[44,3,"ゔぇ","ve"],[44,4,"ゔぉ","vo"]] },
+            { label: "うぃ", data: [[45,1,"うぃ","wi"],[45,3,"うぇ","we"],[45,4,"うぉ","who"]] }
         ]
     };
 
@@ -239,28 +218,29 @@
         chart.innerHTML = "";
         const selected = getSelected();
         if (selected.length === 0) return;
-        const categories = [...new Set(selected.map(s => s.cat))];
-        categories.forEach(cat => {
-            const catItems = selected.filter(s => s.cat === cat).flatMap(s => s.data);
-            const cols = catItems.map(d => d[0]);
-            const minC = Math.min(...cols), maxC = Math.max(...cols);
-            const rowLabels = (cat === 'contracted') ? ["ya","","yu","","yo"] : ["a","i","u","e","o"];
 
-            let html = `<table>`;
-            for (let r = 0; r < 5; r++) {
-                html += `<tr><td class="v-label">${rowLabels[r]}</td>`;
-                for (let c = minC; c <= maxC; c++) {
-                    const item = catItems.find(d => d[0] === c && d[1] === r);
-                    if (item) {
-                        html += `<td id="cell-${cat}-${c}-${r}"><span class="kana-text">${item[2]}</span><span class="romaji-text">${item[3]}</span></td>`;
-                    } else {
-                        html += `<td style="border:none;background:none;"></td>`;
-                    }
+        const allItems = selected.flatMap(s => s.data.map(d => ({cat: s.cat, cell: d})));
+        const cols = allItems.map(d => d.cell[0]);
+        const minC = Math.min(...cols), maxC = Math.max(...cols);
+        const rowLabels = ["a", "i", "u", "e", "o"];
+
+        let html = `<table class="master-table">`;
+        for (let r = 0; r < 5; r++) {
+            html += `<tr><td class="v-label">${rowLabels[r]}</td>`;
+            for (let c = minC; c <= maxC; c++) {
+                const item = allItems.find(d => d.cell[0] === c && d.cell[1] === r);
+                if (item) {
+                    html += `<td id="cell-${item.cat}-${item.cell[0]}-${item.cell[1]}">
+                                <span class="kana-text">${item.cell[2]}</span>
+                                <span class="romaji-text">${item.cell[3]}</span>
+                             </td>`;
+                } else if (allItems.some(d => d.cell[0] === c)) {
+                    html += `<td class="empty-cell"></td>`;
                 }
-                html += `</tr>`;
             }
-            chart.innerHTML += html + `</table>`;
-        });
+            html += `</tr>`;
+        }
+        chart.innerHTML = html + `</table>`;
         handleNext();
     }
 
@@ -288,13 +268,29 @@
 
     function handleCheck() {
         const val = document.getElementById('ans-input').value.toLowerCase().trim();
-        if(!val) return; // 空欄なら何もしない
-        
+        if(!val) return;
+
         const kana = activeQ.data[2];
         const romaji = activeQ.data[3];
-        const ok = (val === romaji) || (kana === 'し' && val === 'shi') || (kana === 'ち' && val === 'chi') || (kana === 'つ' && val === 'tsu') || (kana === 'ふ' && val === 'fu') || (kana === 'じ' && (val === 'zi' || val === 'ji')) || (kana === 'を' && val === 'o');
+
+        // 柔軟な判定ロジック
+        let ok = (val === romaji);
+        if (!ok) {
+            const alt = {
+                'し': ['si'], 'しゅ': ['syu'], 'しゃ': ['sya'], 'しょ': ['syo'],
+                'ち': ['ti'], 'ちゅ': ['cyu', 'tyu'], 'ちゃ': ['cya', 'tya'], 'ちょ': ['cyo', 'tyo'],
+                'つ': ['tu'],
+                'ふ': ['hu'],
+                'じ': ['zi'], 'じゃ': ['zya'], 'じゅ': ['zyu'], 'じょ': ['zyo'],
+                'を': ['o'],
+                'ん': ['n']
+            };
+            if (alt[kana] && alt[kana].includes(val)) ok = true;
+        }
         
-        const cell = document.getElementById(`cell-${activeQ.cat}-${activeQ.data[0]}-${activeQ.data[1]}`);
+        const cellId = `cell-${activeQ.cat}-${activeQ.data[0]}-${activeQ.data[1]}`;
+        const cell = document.getElementById(cellId);
+
         if (ok) {
             document.getElementById('msg').innerText = 'Correct! ✨';
             document.getElementById('ans-input').disabled = true;
@@ -313,15 +309,10 @@
         }
     }
 
-    // InputフィールドでのEnterキー制御
     document.getElementById('ans-input').onkeydown = (e) => {
         if (e.key === 'Enter') {
-            e.preventDefault(); // 予期せぬ挙動を防ぐ
-            if (document.getElementById('next-btn').style.display === 'none') {
-                handleCheck();
-            } else {
-                handleNext();
-            }
+            if (document.getElementById('next-btn').style.display === 'none') handleCheck();
+            else handleNext();
         }
     };
 
