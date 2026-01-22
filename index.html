@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hiragana Master</title>
+    <title>Hiragana Master - UD Font Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,7 +15,8 @@
         }
 
         body { 
-            font-family: "Zen Maru Gothic", sans-serif; 
+            /* UDデジタル教科書体を最優先、次にBIZ UDPゴシック、予備にZen丸ゴシック */
+            font-family: "UD Digital Kyokasho N-R", "UD デジタル 教科書体 N-R", "BIZ UDPGothic", "Zen Maru Gothic", sans-serif; 
             background-color: var(--soft-pink); 
             color: var(--text-color); 
             margin: 0; 
@@ -58,6 +59,7 @@
             background: #f8f8f8;
             cursor: pointer;
             font-weight: bold;
+            font-family: inherit;
         }
 
         .selector-section {
@@ -116,21 +118,20 @@
             padding: 15px 0;
         }
         
-        table { border-collapse: separate; border-spacing: 3px; margin-bottom: 20px; }
+        table { border-collapse: separate; border-spacing: 4px; margin-bottom: 20px; }
         td { 
-            border: 1px solid #ffdae0; width: 48px; height: 48px; text-align: center; border-radius: 8px; 
+            border: 1px solid #ffdae0; width: 55px; height: 55px; text-align: center; border-radius: 8px; 
             background: #fff; position: relative;
         }
         
         .v-label { background: var(--soft-pink); color: var(--accent-pink); font-size: 12px; font-weight: bold; width: 25px; border: none; }
-        .kana-text { font-size: 20px; font-weight: bold; color: #333; display: block; }
-        .romaji-text { font-size: 10px; color: var(--primary-pink); display: block; }
+        /* 文字を大きく、よりはっきりと */
+        .kana-text { font-size: 26px; font-weight: bold; color: #333; display: block; line-height: 1; }
+        .romaji-text { font-size: 11px; color: var(--primary-pink); display: block; margin-top: 2px; }
 
         .correct-highlight { 
             border: 4px solid var(--accent-pink) !important; 
             background-color: #fff0f5 !important; 
-            transform: scale(1.05);
-            transition: 0.2s;
             z-index: 5;
         }
 
@@ -144,10 +145,10 @@
             border-top: 2px solid var(--soft-pink);
         }
 
-        #q-text { font-size: 60px; color: var(--primary-pink); margin: 0; font-weight: bold; }
-        #ans-input { font-size: 24px; padding: 8px; width: 180px; text-align: center; border: 2px solid var(--border-pink); border-radius: 25px; outline: none; }
+        #q-text { font-size: 70px; color: var(--primary-pink); margin: 0; font-weight: bold; line-height: 1; }
+        #ans-input { font-size: 24px; padding: 8px; width: 180px; text-align: center; border: 2px solid var(--border-pink); border-radius: 25px; outline: none; font-family: inherit; }
         
-        .main-btn { padding: 10px 40px; font-size: 18px; font-weight: bold; background: var(--primary-pink); color: white; border: none; border-radius: 20px; cursor: pointer; margin-top: 10px; }
+        .main-btn { padding: 10px 40px; font-size: 18px; font-weight: bold; background: var(--primary-pink); color: white; border: none; border-radius: 20px; cursor: pointer; margin-top: 10px; font-family: inherit; }
         #next-btn { display: none; background: #4caf50; }
         #msg { font-size: 14px; font-weight: bold; height: 20px; margin-bottom: 5px; }
     </style>
@@ -161,9 +162,9 @@
             <button class="small-btn" onclick="setAll(false)">All OFF</button>
         </div>
         <div class="btn-row">
-            <button class="small-btn" onclick="setOnly('basic')">Step 1 Only</button>
-            <button class="small-btn" onclick="setOnly('contracted')">Step 2 Only</button>
-            <button class="small-btn" onclick="setOnly('foreign')">Step 3 Only</button>
+            <button class="small-btn" onclick="setOnly('basic')">Step 1: BASIC SOUNDS Only</button>
+            <button class="small-btn" onclick="setOnly('contracted')">Step 2: COMBINED SOUNDS Only</button>
+            <button class="small-btn" onclick="setOnly('foreign')">Step 3: SPECIAL SOUNDS Only</button>
         </div>
     </div>
 
@@ -207,7 +208,7 @@
             { label: "が", data: [[11,0,"が","ga"],[11,1,"ぎ","gi"],[11,2,"ぐ","gu"],[11,3,"げ","ge"],[11,4,"ご","go"]] },
             { label: "ざ", data: [[12,0,"ざ","za"],[12,1,"じ","ji"],[12,2,"ず","zu"],[12,3,"ぜ","ze"],[12,4,"ぞ","zo"]] },
             { label: "だ", data: [[13,0,"だ","da"],[13,1,"ぢ","ji"],[13,2,"づ","zu"],[13,3,"で","de"],[13,4,"ど","do"]] },
-            { label: "ば", data: [[14,0,"ば","ba"],[14,1,"び","bi"],[14,2,"ぶ","bu"],[14,3,"べ","be"],[14,4,"ぼ","bo"]] },
+            { label: "ば", data: [[14,0,"ば","ba"],[14,1,"び","bi"],[14,2,"ぶ","ぶ","bu"],[14,3,"べ","be"],[14,4,"ぼ","bo"]] },
             { label: "ぱ", data: [[15,0,"ぱ","pa"],[15,1,"ぴ","pi"],[15,2,"ぷ","pu"],[15,3,"ぺ","pe"],[15,4,"ぽ","po"]] }
         ],
         contracted: [
