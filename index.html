@@ -2,160 +2,378 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>Hiragana Typing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiragana Typing - Full Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #ff69b4; --bg: #fff0f5; --txt: #5d4037; }
-        body { font-family: sans-serif; background: var(--bg); color: var(--txt); display: flex; flex-direction: column; height: 100vh; margin: 0; overflow: hidden; }
-        .card { background: white; flex: 1; margin: 5px; border-radius: 15px; padding: 8px; border: 2px solid #ffb6c1; display: flex; flex-direction: column; min-height: 0; }
-        .btns { display: flex; flex-wrap: wrap; gap: 5px; padding-bottom: 5px; }
-        .small-btn { font-size: 10px; padding: 4px 8px; cursor: pointer; font-weight: bold; }
-        .selector { background: #fffafa; border-radius: 10px; padding: 8px; border: 1px solid #ffb6c1; margin-bottom: 8px; }
-        .group-title { font-size: 10px; color: var(--p); font-weight: bold; border-left: 3px solid var(--p); padding-left: 5px; display: block; margin: 4px 0; }
-        .chips { display: flex; flex-wrap: wrap; gap: 4px; }
-        .chip { display: flex; align-items: center; background: white; border: 1px solid #ffb6c1; padding: 2px 8px; border-radius: 20px; font-size: 12px; cursor: pointer; }
-        .chip:has(input:checked) { background: var(--p); color: white; }
-        .display { flex: 1; overflow-y: auto; background: #fafafa; border-radius: 10px; display: flex; flex-direction: column; align-items: center; padding: 10px 0; }
-        table { border-collapse: separate; border-spacing: 2px; }
-        td { border: 1px solid #ffdae0; width: 40px; height: 40px; text-align: center; border-radius: 6px; background: #fff; position: relative; }
-        .v-label { background: var(--bg); color: #ff1493; font-size: 10px; font-weight: bold; width: 20px; border: none; }
-        .kana { font-size: 16px; font-weight: bold; display: block; }
-        .romaji { font-size: 8px; color: var(--p); display: block; }
-        .target { border: 3px solid #ff1493 !important; background: #fff0f5 !important; }
-        .quiz { height: 130px; border-top: 2px solid var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        #q { font-size: 50px; color: var(--p); font-weight: bold; margin: 0; }
-        #ans { font-size: 20px; width: 140px; text-align: center; border: 2px solid #ffb6c1; border-radius: 20px; outline: none; }
-        .action { padding: 8px 25px; font-size: 16px; font-weight: bold; background: var(--p); color: white; border: none; border-radius: 15px; cursor: pointer; margin-top: 5px; }
-        #fb { font-size: 12px; font-weight: bold; height: 15px; margin-bottom: 2px; }
+        :root {
+            --primary-pink: #ff69b4;
+            --soft-pink: #fff0f5;
+            --border-pink: #ffb6c1;
+            --accent-pink: #ff1493;
+            --text-color: #5d4037;
+        }
+
+        body { 
+            font-family: "Zen Maru Gothic", sans-serif; 
+            background-color: var(--soft-pink); 
+            color: var(--text-color); 
+            margin: 0; 
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .app-card {
+            background: white;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin: 5px;
+            border-radius: 15px;
+            padding: 8px;
+            border: 2px solid var(--border-pink);
+            box-sizing: border-box;
+            min-height: 0;
+        }
+
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 0 5px 10px 5px;
+        }
+
+        .btn-row {
+            display: flex;
+            justify-content: flex-start;
+            gap: 5px;
+        }
+
+        .small-btn {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background: #f0f0f0;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .selector-section {
+            background: #fffafa;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border-pink);
+        }
+
+        .category-group {
+            margin-bottom: 8px;
+        }
+
+        .category-title {
+            font-size: 10px;
+            font-weight: bold;
+            color: var(--primary-pink);
+            margin-bottom: 4px;
+            display: block;
+            border-left: 3px solid var(--primary-pink);
+            padding-left: 5px;
+        }
+
+        .row-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .chip {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            background: white;
+            border: 1px solid var(--border-pink);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .chip input { cursor: pointer; margin: 0; }
+        .chip:has(input:checked) {
+            background: var(--primary-pink);
+            color: white;
+            border-color: var(--primary-pink);
+        }
+
+        .chart-display-area { 
+            flex: 1; 
+            overflow-y: auto; 
+            display: flex; 
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 10px 0;
+            background: #fafafa;
+            border-radius: 10px;
+        }
+        
+        table { border-collapse: separate; border-spacing: 2px; margin-bottom: 10px; }
+        td { 
+            border: 1px solid #ffdae0; width: 44px; height: 44px; text-align: center; border-radius: 6px; 
+            background: #fff; position: relative;
+        }
+        
+        .vowel-label { background: var(--soft-pink); color: var(--accent-pink); font-size: 12px; font-weight: bold; width: 25px; border: none; }
+        .kana { font-size: 18px; font-weight: 700; color: #333; display: block; line-height: 1.1; }
+        .romaji { font-size: 9px; color: var(--primary-pink); display: block; opacity: 0.8; }
+        .target-cell { border: 3px solid var(--accent-pink) !important; background-color: #fff0f5 !important; z-index: 10; }
+
+        .bottom-quiz-section {
+            height: 160px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+            padding: 10px;
+            border-top: 2px solid var(--soft-pink);
+            position: relative;
+        }
+
+        #question { font-size: 64px; color: var(--primary-pink); margin: 0; font-weight: bold; }
+        #answer-input { font-family: inherit; font-size: 24px; padding: 6px; width: 160px; text-align: center; border: 2px solid var(--border-pink); border-radius: 20px; outline: none; }
+        
+        .action-btn { padding: 8px 30px; font-size: 16px; font-weight: bold; background: var(--primary-pink); color: white; border: none; border-radius: 15px; cursor: pointer; margin-top: 5px; }
+        #next-btn { display: none; background: #4caf50; }
+        #feedback { font-size: 14px; font-weight: bold; height: 18px; margin-bottom: 4px; }
     </style>
 </head>
 <body>
-<div class="card">
-    <div class="btns">
-        <button class="small-btn" onclick="sel(true)">All ON</button>
-        <button class="small-btn" onclick="sel(false)">All OFF</button>
-        <button class="small-btn" onclick="only('basic')">Step 1 Only</button>
-        <button class="small-btn" onclick="only('contracted')">Step 2 Only</button>
-        <button class="small-btn" onclick="only('foreign')">Step 3 Only</button>
+
+<div class="app-card">
+    <div class="control-panel">
+        <div class="btn-row">
+            <button class="small-btn" onclick="selectAll(true)">All ON</button>
+            <button class="small-btn" onclick="selectAll(false)">All OFF</button>
+        </div>
+        <div class="btn-row">
+            <button class="small-btn" onclick="selectCategory('basic')">Step 1: Basic Only</button>
+            <button class="small-btn" onclick="selectCategory('contracted')">Step 2: Combined Only</button>
+            <button class="small-btn" onclick="selectCategory('foreign')">Step 3: Special Only</button>
+        </div>
     </div>
-    <div class="selector">
-        <span class="group-title">STEP 1: BASIC</span><div id="c-basic" class="chips"></div>
-        <span class="group-title">STEP 2: COMBINED</span><div id="c-contracted" class="chips"></div>
-        <span class="group-title">STEP 3: SPECIAL</span><div id="c-foreign" class="chips"></div>
+
+    <div class="selector-section">
+        <div class="category-group">
+            <span class="category-title">STEP 1: BASIC SOUNDS</span>
+            <div id="chips-basic" class="row-chips"></div>
+        </div>
+        <div class="category-group">
+            <span class="category-title">STEP 2: COMBINED SOUNDS</span>
+            <div id="chips-contracted" class="row-chips"></div>
+        </div>
+        <div class="category-group">
+            <span class="category-title">STEP 3: SPECIAL SOUNDS</span>
+            <div id="chips-foreign" class="row-chips"></div>
+        </div>
     </div>
-    <div class="display"><div id="chart"></div></div>
-    <div class="quiz">
-        <div id="fb"></div><div id="q">?</div>
-        <input type="text" id="ans" placeholder="Type..." autocomplete="off">
-        <div>
-            <button id="ok" class="action" onclick="check()">OK</button>
-            <button id="next" class="action" onclick="nextQ()" style="display:none; background:#4caf50;">NEXT</button>
+
+    <div id="display-area" class="chart-display-area">
+        <div id="chart-container"></div>
+    </div>
+
+    <div class="bottom-quiz-section">
+        <div id="feedback"></div>
+        <div id="question">?</div>
+        <div class="input-wrapper">
+            <input type="text" id="answer-input" placeholder="Type Romaji..." autocomplete="off">
+            <div>
+                <button id="check-btn" class="action-btn" onclick="checkAnswer()">OK</button>
+                <button id="next-btn" class="action-btn" onclick="nextQuestion()">NEXT</button>
+            </div>
         </div>
     </div>
 </div>
+
 <script>
-const gameData = {
-    basic: [
-        { label: "あ", data: [[0,0,"あ","a"],[0,1,"い","i"],[0,2,"う","u"],[0,3,"え","e"],[0,4,"お","o"]] },
-        { label: "か", data: [[1,0,"か","ka"],[1,1,"き","ki"],[1,2,"く","ku"],[1,3,"け","ke"],[1,4,"こ","ko"]] },
-        { label: "さ", data: [[2,0,"さ","sa"],[2,1,"し","shi"],[2,2,"す","su"],[2,3,"せ","se"],[2,4,"そ","so"]] },
-        { label: "た", data: [[3,0,"た","ta"],[3,1,"ち","chi"],[3,2,"つ","tsu"],[3,3,"て","te"],[3,4,"と","to"]] },
-        { label: "な", data: [[4,0,"な","na"],[4,1,"に","ni"],[4,2,"ぬ","nu"],[4,3,"ね","ne"],[4,4,"の","no"]] },
-        { label: "は", data: [[5,0,"は","ha"],[5,1,"ひ","hi"],[5,2,"ふ","fu"],[5,3,"へ","he"],[5,4,"ほ","ho"]] },
-        { label: "ま", data: [[6,0,"ま","ma"],[6,1,"み","mi"],[6,2,"む","mu"],[6,3,"め","me"],[6,4,"も","mo"]] },
-        { label: "や", data: [[7,0,"や","ya"],[7,2,"ゆ","yu"],[7,4,"よ","yo"]] },
-        { label: "ら", data: [[8,0,"ら","ra"],[8,1,"り","ri"],[8,2,"る","ru"],[8,3,"れ","re"],[8,4,"ろ","ro"]] },
-        { label: "わ", data: [[9,0,"わ","wa"],[9,2,"を","wo"],[9,4,"ん","nn"]] },
-        { label: "が", data: [[11,0,"が","ga"],[11,1,"ぎ","gi"],[11,2,"ぐ","gu"],[11,3,"げ","ge"],[11,4,"ご","go"]] },
-        { label: "ざ", data: [[12,0,"ざ","za"],[12,1,"じ","ji"],[12,2,"ず","zu"],[12,3,"ぜ","ze"],[12,4,"ぞ","zo"]] },
-        { label: "だ", data: [[13,0,"だ","da"],[13,1,"ぢ","ji"],[13,2,"づ","zu"],[13,3,"で","de"],[13,4,"ど","do"]] },
-        { label: "ば", data: [[14,0,"ば","ba"],[14,1,"び","bi"],[14,2,"ぶ","bu"],[14,3,"べ","be"],[14,4,"ぼ","bo"]] },
-        { label: "ぱ", data: [[15,0,"ぱ","pa"],[15,1,"ぴ","pi"],[15,2,"ぷ","pu"],[15,3,"ぺ","pe"],[15,4,"ぽ","po"]] }
-    ],
-    contracted: [
-        { label: "きゃ", data: [[0,0,"きゃ","kya"],[0,2,"きゅ","kyu"],[0,4,"きょ","kyo"]] },
-        { label: "しゃ", data: [[1,0,"しゃ","sha"],[1,2,"しゅ","shu"],[1,4,"しょ","sho"]] },
-        { label: "ちゃ", data: [[2,0,"ちゃ","cha"],[2,2,"ちゅ","chu"],[2,4,"ちょ","cho"]] },
-        { label: "にゃ", data: [[3,0,"にゃ","nya"],[3,2,"にゅ","nyu"],[3,4,"にょ","nyo"]] },
-        { label: "ひゃ", data: [[4,0,"ひゃ","hya"],[4,2,"ひゅ","hyu"],[4,4,"ひょ","hyo"]] },
-        { label: "みゃ", data: [[5,0,"みゃ","mya"],[5,2,"みゅ","myu"],[5,4,"みょ","myo"]] },
-        { label: "りゃ", data: [[6,0,"りゃ","rya"],[6,2,"りゅ","ryu"],[6,4,"りょ","ryo"]] },
-        { label: "ぎゃ", data: [[8,0,"ぎゃ","gya"],[8,2,"ぎゅ","gyu"],[8,4,"ぎょ","gyo"]] },
-        { label: "じゃ", data: [[9,0,"じゃ","ja"],[9,2,"じゅ","ju"],[9,4,"じょ","jo"]] },
-        { label: "びゃ", data: [[10,0,"びゃ","bya"],[10,2,"びゅ","byu"],[10,4,"びょ","byo"]] },
-        { label: "ぴゃ", data: [[11,0,"ぴゃ","pya"],[11,2,"ぴゅ","pyu"],[11,4,"ぴょ","pyo"]] }
-    ],
-    foreign: [
-        { label: "ふぁ", data: [[0,0,"ふぁ","fa"],[0,1,"ふぃ","fi"],[0,3,"ふぇ","fe"],[0,4,"ふぉ","fo"]] },
-        { label: "てぃ", data: [[1,1,"てぃ","thi"]] },
-        { label: "ちぇ", data: [[2,3,"ちぇ","che"]] },
-        { label: "でぃ", data: [[3,1,"でぃ","dhi"],[3,2,"でゅ","dhu"]] },
-        { label: "じぇ", data: [[5,3,"じぇ","je"],[6,3,"しぇ","she"]] },
-        { label: "ゔぁ", data: [[8,0,"ゔぁ","va"],[8,1,"ゔぃ","vi"],[8,2,"ゔ","vu"],[8,3,"ゔぇ","ve"],[8,4,"ゔぉ","vo"]] },
-        { label: "うぃ", data: [[9,1,"うぃ","wi"],[9,3,"うぇ","we"],[9,4,"うぉ","who"]] }
-    ]
-};
-let cur = null;
-function init() {
-    for (const k in gameData) {
-        const div = document.getElementById('c-'+k);
-        gameData[k].forEach((g, i) => {
-            const l = document.createElement('label'); l.className = 'chip';
-            const chk = (k==='basic'&&i===0)?'checked':'';
-            l.innerHTML = `<input type="checkbox" data-cat="${k}" data-idx="${i}" ${chk} onchange="upd()"> ${g.label}`;
-            div.appendChild(l);
-        });
-    }
-    upd();
-}
-function sel(v) { document.querySelectorAll('.chip input').forEach(i=>i.checked=v); upd(); }
-function only(cat) { document.querySelectorAll('.chip input').forEach(i=>i.checked=(i.dataset.cat===cat)); upd(); }
-function upd() {
-    const cont = document.getElementById('chart'); cont.innerHTML = "";
-    const selected = Array.from(document.querySelectorAll('.chip input:checked')).map(i=>({cat:i.dataset.cat, d:gameData[i.dataset.cat][i.dataset.idx].d}));
-    if(!selected.length) { document.getElementById('q').innerText="?"; return; }
-    [...new Set(selected.map(s=>s.cat))].forEach(c=>{
-        const list = selected.filter(s=>s.cat===c).flatMap(s=>s.d);
-        const maxC = Math.max(...list.map(d=>d[0])), minC = Math.min(...list.map(d=>d[0]));
-        const lbs = (c==='contracted')?["ya","","yu","","yo"]:["a","i","u","e","o"];
-        let h = `<table>`;
-        for(let r=0; r<5; r++){
-            h+=`<tr><td class="v-label">${lbs[r]}</td>`;
-            for(let col=minC; col<=maxC; col++){
-                const item = list.find(d=>d[0]===col && d[1]===r);
-                h += item ? `<td id="cell-${c}-${col}-${r}"><span class="kana">${item[2]}</span><span class="romaji">${item[3]}</span></td>` : `<td style="border:none;background:none;"></td>`;
-            }
-            h+='</tr>';
+    const gameData = {
+        basic: [
+            { label: "あ", data: [[0,0,"あ","a"],[0,1,"い","i"],[0,2,"う","u"],[0,3,"え","e"],[0,4,"お","o"]] },
+            { label: "か", data: [[1,0,"か","ka"],[1,1,"き","ki"],[1,2,"く","ku"],[1,3,"け","ke"],[1,4,"こ","ko"]] },
+            { label: "さ", data: [[2,0,"さ","sa"],[2,1,"し","shi"],[2,2,"す","su"],[2,3,"せ","se"],[2,4,"そ","so"]] },
+            { label: "た", data: [[3,0,"た","ta"],[3,1,"ち","chi"],[3,2,"つ","tsu"],[3,3,"て","te"],[3,4,"と","to"]] },
+            { label: "な", data: [[4,0,"な","na"],[4,1,"に","ni"],[4,2,"ぬ","nu"],[4,3,"ね","ne"],[4,4,"の","no"]] },
+            { label: "は", data: [[5,0,"は","ha"],[5,1,"ひ","hi"],[5,2,"ふ","fu"],[5,3,"へ","he"],[5,4,"ほ","ho"]] },
+            { label: "ま", data: [[6,0,"ま","ma"],[6,1,"み","mi"],[6,2,"む","mu"],[6,3,"め","me"],[6,4,"も","mo"]] },
+            { label: "や", data: [[7,0,"や","ya"],[7,2,"ゆ","yu"],[7,4,"よ","yo"]] },
+            { label: "ら", data: [[8,0,"ら","ra"],[8,1,"り","ri"],[8,2,"る","ru"],[8,3,"れ","re"],[8,4,"ろ","ro"]] },
+            { label: "わ", data: [[9,0,"わ","wa"],[9,2,"を","wo"],[9,4,"ん","nn"]] },
+            { label: "が", data: [[11,0,"が","ga"],[11,1,"ぎ","gi"],[11,2,"ぐ","gu"],[11,3,"げ","ge"],[11,4,"ご","go"]] },
+            { label: "ざ", data: [[12,0,"ざ","za"],[12,1,"じ","ji"],[12,2,"ず","zu"],[12,3,"ぜ","ze"],[12,4,"ぞ","zo"]] },
+            { label: "だ", data: [[13,0,"だ","da"],[13,1,"ぢ","ji"],[13,2,"づ","zu"],[13,3,"で","de"],[13,4,"ど","do"]] },
+            { label: "ば", data: [[14,0,"ば","ba"],[14,1,"び","bi"],[14,2,"ぶ","bu"],[14,3,"べ","be"],[14,4,"ぼ","bo"]] },
+            { label: "ぱ", data: [[15,0,"ぱ","pa"],[15,1,"ぴ","pi"],[15,2,"ぷ","pu"],[15,3,"ぺ","pe"],[15,4,"ぽ","po"]] }
+        ],
+        contracted: [
+            { label: "きゃ", data: [[0,0,"きゃ","kya"],[0,2,"きゅ","kyu"],[0,4,"きょ","kyo"]] },
+            { label: "しゃ", data: [[1,0,"しゃ","sha"],[1,2,"しゅ","shu"],[1,4,"しょ","sho"]] },
+            { label: "ちゃ", data: [[2,0,"ちゃ","cha"],[2,2,"ちゅ","chu"],[2,4,"ちょ","cho"]] },
+            { label: "にゃ", data: [[3,0,"にゃ","nya"],[3,2,"にゅ","nyu"],[3,4,"にょ","nyo"]] },
+            { label: "ひゃ", data: [[4,0,"ひゃ","hya"],[4,2,"ひゅ","hyu"],[4,4,"ひょ","hyo"]] },
+            { label: "みゃ", data: [[5,0,"みゃ","mya"],[5,2,"みゅ","myu"],[5,4,"みょ","myo"]] },
+            { label: "りゃ", data: [[6,0,"りゃ","rya"],[6,2,"りゅ","ryu"],[6,4,"りょ","ryo"]] },
+            { label: "ぎゃ", data: [[8,0,"ぎゃ","gya"],[8,2,"ぎゅ","gyu"],[8,4,"ぎょ","gyo"]] },
+            { label: "じゃ", data: [[9,0,"じゃ","ja"],[9,2,"じゅ","ju"],[9,4,"じょ","jo"]] },
+            { label: "びゃ", data: [[10,0,"びゃ","bya"],[10,2,"びゅ","byu"],[10,4,"びょ","byo"]] },
+            { label: "ぴゃ", data: [[11,0,"ぴゃ","pya"],[11,2,"ぴゅ","pyu"],[11,4,"ぴょ","pyo"]] }
+        ],
+        foreign: [
+            { label: "ふぁ", data: [[0,0,"ふぁ","fa"],[0,1,"ふぃ","fi"],[0,3,"ふぇ","fe"],[0,4,"ふぉ","fo"]] },
+            { label: "てぃ", data: [[1,1,"てぃ","thi"]] },
+            { label: "ちぇ", data: [[2,3,"ちぇ","che"]] },
+            { label: "でぃ", data: [[3,1,"でぃ","dhi"],[3,2,"でゅ","dhu"]] },
+            { label: "じぇ", data: [[5,3,"じぇ","je"],[6,3,"しぇ","she"]] },
+            { label: "ゔぁ", data: [[8,0,"ゔぁ","va"],[8,1,"ゔぃ","vi"],[8,2,"ゔ","vu"],[8,3,"ゔぇ","ve"],[8,4,"ゔぉ","vo"]] },
+            { label: "うぃ", data: [[9,1,"うぃ","wi"],[9,3,"うぇ","we"],[9,4,"うぉ","who"]] }
+        ]
+    };
+
+    let currentQuestion = null;
+
+    function init() {
+        for (const category in gameData) {
+            const container = document.getElementById(`chips-${category}`);
+            gameData[category].forEach((group, index) => {
+                const label = document.createElement('label');
+                label.className = 'chip';
+                const isChecked = (category === 'basic' && index === 0) ? 'checked' : '';
+                label.innerHTML = `<input type="checkbox" data-cat="${category}" data-idx="${index}" ${isChecked} onchange="updateView()"> ${group.label}`;
+                container.appendChild(label);
+            });
         }
-        cont.innerHTML += h+'</table>';
-    });
-    nextQ();
-}
-function nextQ() {
-    const sel = Array.from(document.querySelectorAll('.chip input:checked'));
-    if(!sel.length) return;
-    const rG = sel[Math.floor(Math.random()*sel.length)];
-    const rI = gameData[rG.dataset.cat][rG.dataset.idx].data;
-    cur = {cat:rG.dataset.cat, d: rI[Math.floor(Math.random()*rI.length)]};
-    document.getElementById('q').innerText = cur.d[2];
-    const i = document.getElementById('ans'); i.value=''; i.disabled=false; i.focus();
-    document.getElementById('fb').innerText=''; document.getElementById('next').style.display='none'; document.getElementById('ok').style.display='inline-block';
-    document.querySelectorAll('td').forEach(t=>t.classList.remove('target'));
-}
-function check() {
-    const v = document.getElementById('ans').value.toLowerCase().trim();
-    const isC = (v===cur.d[3]) || (cur.d[2]==='し'&&v==='si') || (cur.d[2]==='ち'&&v==='ti') || (cur.d[2]==='つ'&&v==='tu') || (cur.d[2]==='ふ'&&v==='hu') || (cur.d[2]==='じ'&&(v==='zi'||v==='ji')) || (cur.d[2]==='を'&&v==='o');
-    const td = document.getElementById(`cell-${cur.cat}-${cur.d[0]}-${cur.d[1]}`);
-    if(isC) {
-        document.getElementById('fb').innerText='Correct! ✨'; document.getElementById('ans').disabled=true;
-        document.getElementById('ok').style.display='none'; document.getElementById('next').style.display='inline-block'; document.getElementById('next').focus();
-        if(td) { td.classList.add('target'); td.scrollIntoView({behavior:'smooth',block:'center'}); }
-    } else {
-        document.getElementById('fb').innerText='Check chart! 💡';
-        if(td) { td.classList.add('target'); td.scrollIntoView({behavior:'smooth',block:'center'}); }
+        updateView();
     }
-}
-document.getElementById('ans').onkeydown=(e)=>{ if(e.key==='Enter') (document.getElementById('next').style.display==='none')?check():nextQ(); };
-init();
+
+    function selectAll(bool) {
+        document.querySelectorAll('.chip input').forEach(input => input.checked = bool);
+        updateView();
+    }
+
+    function selectCategory(catName) {
+        document.querySelectorAll('.chip input').forEach(input => {
+            input.checked = (input.dataset.cat === catName);
+        });
+        updateView();
+    }
+
+    function updateView() {
+        const container = document.getElementById('chart-container');
+        container.innerHTML = "";
+        const selected = getSelectedItems();
+        
+        if (selected.length === 0) {
+            container.innerHTML = "<p style='color:gray; padding:20px;'>Select a row to start.</p>";
+            document.getElementById('question').innerText = "?";
+            return;
+        }
+
+        const activeCategories = [...new Set(selected.map(s => s.category))];
+        activeCategories.forEach(cat => {
+            const catSelected = selected.filter(s => s.category === cat);
+            const flatData = catSelected.flatMap(s => s.data);
+            const maxC = Math.max(...flatData.map(d => d[0]));
+            const minC = Math.min(...flatData.map(d => d[0]));
+            const labels = (cat === 'contracted') ? ["ya","","yu","","yo"] : ["a","i","u","e","o"];
+
+            let tableHtml = `<table>`;
+            for (let r = 0; r < 5; r++) {
+                tableHtml += `<tr><td class="vowel-label">${labels[r]}</td>`;
+                for (let c = minC; c <= maxC; c++) {
+                    const item = flatData.find(d => d[0] === c && d[1] === r);
+                    if (item) {
+                        tableHtml += `<td id="cell-${cat}-${c}-${r}"><span class="kana">${item[2]}</span><span class="romaji">${item[3]}</span></td>`;
+                    } else {
+                        tableHtml += '<td style="border:none;background:none;"></td>';
+                    }
+                }
+                tableHtml += '</tr>';
+            }
+            container.innerHTML += tableHtml + "</table>";
+        });
+        nextQuestion();
+    }
+
+    function getSelectedItems() {
+        const inputs = document.querySelectorAll('.chip input:checked');
+        return Array.from(inputs).map(input => ({
+            category: input.dataset.cat,
+            data: gameData[input.dataset.cat][input.dataset.idx].data
+        }));
+    }
+
+    function nextQuestion() {
+        const selected = getSelectedItems();
+        if (selected.length === 0) return;
+
+        const randomGroup = selected[Math.floor(Math.random() * selected.length)];
+        const randomItem = randomGroup.data[Math.floor(Math.random() * randomGroup.data.length)];
+        
+        currentQuestion = { category: randomGroup.category, data: randomItem };
+        document.getElementById('question').innerText = currentQuestion.data[2];
+        
+        const input = document.getElementById('answer-input');
+        input.value = ''; input.disabled = false; input.focus();
+        document.getElementById('feedback').innerText = '';
+        document.getElementById('next-btn').style.display = 'none';
+        document.getElementById('check-btn').style.display = 'inline-block';
+        document.querySelectorAll('td').forEach(td => td.classList.remove('target-cell'));
+    }
+
+    function checkAnswer() {
+        const val = document.getElementById('answer-input').value.toLowerCase().trim();
+        const kana = currentQuestion.data[2];
+        const ans = currentQuestion.data[3];
+        
+        const isCorrect = (val === ans) || 
+            (kana === 'し' && val === 'si') || (kana === 'ち' && val === 'ti') || 
+            (kana === 'つ' && val === 'tu') || (kana === 'ふ' && val === 'hu') ||
+            (kana === 'じ' && (val === 'zi' || val === 'ji')) ||
+            (kana === 'を' && val === 'o');
+
+        const cellId = `cell-${currentQuestion.category}-${currentQuestion.data[0]}-${currentQuestion.data[1]}`;
+        const target = document.getElementById(cellId);
+
+        if (isCorrect) {
+            document.getElementById('feedback').innerText = 'Correct! ✨';
+            document.getElementById('answer-input').disabled = true;
+            document.getElementById('check-btn').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'inline-block';
+            document.getElementById('next-btn').focus();
+            if (target) {
+                target.classList.add('target-cell');
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        } else {
+            document.getElementById('feedback').innerText = 'Check the chart! 💡';
+            if (target) {
+                target.classList.add('target-cell');
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+    }
+
+    document.getElementById('answer-input').onkeydown = function(e) {
+        if (e.key === 'Enter') {
+            if (document.getElementById('next-btn').style.display === 'inline-block') nextQuestion();
+            else checkAnswer();
+        }
+    };
+
+    init();
 </script>
 </body>
 </html>
