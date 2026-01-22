@@ -2,394 +2,85 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hiragana Typing - Full Foreign Support</title>
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
+    <title>カタカナタイピング練習</title>
     <style>
-        :root {
-            --primary-pink: #ff69b4;
-            --soft-pink: #fff0f5;
-            --border-pink: #ffb6c1;
-            --accent-pink: #ff1493;
-            --text-color: #5d4037;
-        }
-
-        body { 
-            font-family: "UD Digital Kyokasho N-R", "UD デジタル 教科書体 N-R", "BIZ UDPGothic", "Zen Maru Gothic", sans-serif; 
-            background-color: var(--soft-pink); 
-            color: var(--text-color); 
-            margin: 0; 
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .app-card {
-            background: white;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            margin: 5px;
-            border-radius: 15px;
-            padding: 8px;
-            border: 2px solid var(--border-pink);
-            box-sizing: border-box;
-            min-height: 0;
-        }
-
-        .control-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            padding: 0 5px 10px 5px;
-        }
-
-        .btn-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .small-btn {
-            font-size: 10px;
-            padding: 4px 8px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            background: #f0f0f0;
-            cursor: pointer;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
-        .selector-section {
-            background: #fffafa;
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 8px;
-            border: 1px solid var(--border-pink);
-        }
-
-        .category-group {
-            margin-bottom: 8px;
-        }
-
-        .category-title {
-            font-size: 10px;
-            font-weight: bold;
-            color: var(--primary-pink);
-            margin-bottom: 4px;
-            display: block;
-            border-left: 3px solid var(--primary-pink);
-            padding-left: 5px;
-        }
-
-        .row-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-        }
-
-        .chip {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            background: white;
-            border: 1px solid var(--border-pink);
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 13px;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .chip input { cursor: pointer; margin: 0; }
-        .chip:has(input:checked) {
-            background: var(--primary-pink);
-            color: white;
-            border-color: var(--primary-pink);
-        }
-
-        .chart-display-area { 
-            flex: 1; 
-            overflow-y: auto; 
-            display: flex; 
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            padding: 10px 0;
-            background: #fafafa;
-            border-radius: 10px;
-        }
-        
-        table { border-collapse: separate; border-spacing: 2px; margin-bottom: 10px; }
-        td { 
-            border: 1px solid #ffdae0; width: 44px; height: 44px; text-align: center; border-radius: 6px; 
-            background: #fff; position: relative;
-        }
-        
-        .challenge-mode-active td:not(.vowel-label):not(.empty-col) .kana,
-        .challenge-mode-active td:not(.vowel-label):not(.empty-col) .romaji { visibility: hidden; }
-        .challenge-mode-active td:not(.vowel-label):not(.empty-col)::after {
-            content: "?"; color: #eee; font-size: 14px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-        }
-
-        .show-cell .kana, .show-cell .romaji { visibility: visible !important; }
-        .show-cell::after { display: none !important; }
-        .target-cell { border: 3px solid var(--accent-pink) !important; background-color: #fff0f5 !important; z-index: 10; }
-
-        .vowel-label { background: var(--soft-pink); color: var(--accent-pink); font-size: 12px; font-weight: bold; width: 25px; border: none; }
-        .kana { font-size: 18px; font-weight: 700; color: #333; display: block; line-height: 1.1; }
-        .romaji { font-size: 9px; color: var(--primary-pink); display: block; opacity: 0.8; }
-
-        .bottom-quiz-section {
-            height: 150px; 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: #fff;
-            padding: 10px;
-            border-top: 2px solid var(--soft-pink);
-            position: relative;
-        }
-
-        #question { font-size: 60px; color: var(--primary-pink); margin: 0; font-weight: bold; }
-        #answer-input { font-family: inherit; font-size: 24px; padding: 6px; width: 160px; text-align: center; border: 2px solid var(--border-pink); border-radius: 20px; outline: none; }
-        
-        .action-btn { padding: 8px 30px; font-size: 16px; font-weight: bold; background: var(--primary-pink); color: white; border: none; border-radius: 15px; cursor: pointer; margin-top: 5px; }
-        #next-btn { display: none; background: #4caf50; }
-        #feedback { font-size: 14px; font-weight: bold; height: 18px; margin-bottom: 4px; }
+        body { text-align: center; font-family: 'Segoe UI', sans-serif; padding-top: 50px; background-color: #f9f9f9; }
+        .question-box { background: white; padding: 30px; border-radius: 15px; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .target-char { font-size: 80px; color: #333; margin: 0; }
+        input { font-size: 24px; padding: 10px; width: 200px; border: 2px solid #ddd; border-radius: 10px; outline: none; text-align: center; }
+        input:focus { border-color: #ff69b4; }
+        .result-message { height: 40px; margin-top: 20px; font-size: 24px; font-weight: bold; }
+        .correct { color: #ff69b4; } /* あたり */
+        .wrong { color: #ffa500; }   /* はずれ */
+        .score-board { margin-top: 20px; font-size: 20px; color: #666; }
     </style>
 </head>
 <body>
 
-<div class="app-card">
-    <div class="control-panel">
-        <div class="btn-row">
-            <div style="display:flex; gap:3px;">
-                <button class="small-btn" onclick="selectAll(true)">All ON</button>
-                <button class="small-btn" onclick="selectAll(false)">All OFF</button>
-            </div>
-            <button id="challenge-btn" class="small-btn" onclick="toggleChallenge()" style="background:#5d4037; color:white;">Hide Chart: OFF</button>
-        </div>
-        <div class="btn-row" style="justify-content: flex-start; gap:5px;">
-            <button class="small-btn" onclick="selectOnly('basic')">Step 1: Basic Only</button>
-            <button class="small-btn" onclick="selectOnly('contracted')">Step 2: Combined Only</button>
-            <button class="small-btn" onclick="selectOnly('foreign')">Step 3: Special Only</button>
-        </div>
+    <div class="question-box">
+        <p id="target-ja" class="target-char">準備完了？</p>
+        <input type="text" id="type-input" placeholder="ローマ字を打ってね" autocomplete="off">
+        
+        <div id="result-text" class="result-message"></div>
+        <div class="score-board">正解数: <span id="score-count">0</span></div>
     </div>
 
-    <div class="selector-section">
-        <div class="category-group">
-            <span class="category-title">STEP 1: BASIC SOUNDS</span>
-            <div id="chips-basic" class="row-chips"></div>
-        </div>
-        <div class="category-group">
-            <span class="category-title">STEP 2: COMBINED SOUNDS</span>
-            <div id="chips-contracted" class="row-chips"></div>
-        </div>
-        <div class="category-group">
-            <span class="category-title">STEP 3: SPECIAL SOUNDS</span>
-            <div id="chips-foreign" class="row-chips"></div>
-        </div>
-    </div>
+    <script>
+        // あなたが修正したデータ
+        const gameData = {
+            foreign: [
+                { label: "ふぁ", data: [[0,0,"ふぁ","fa"],[0,1,"ふぃ","fi"],[0,3,"ふぇ","fe"],[0,4,"ふぉ","fo"]] },
+                { label: "てぃ", data: [[1,1,"てぃ","thi"]] },
+                { label: "ちぇ", data: [[2,3,"ちぇ","che"]] },
+                { label: "でぃ", data: [[3,1,"でぃ","dhi"],[3,2,"でゅ","dhu"]] },
+                { label: "じぇ", data: [[5,3,"じぇ","je"],[6,3,"しぇ","she"]] },
+                { label: "ゔぁ", data: [[8,0,"ゔぁ","va"],[8,1,"ゔぃ","vi"],[8,2,"ゔ","vu"],[8,3,"ゔぇ","ve"],[8,4,"ゔぉ","vo"]] },
+                { label: "うぃ", data: [[9,1,"うぃ","wi"],[9,3,"うぇ","we"],[9,4,"うぉ","who"]] }
+            ]
+        };
 
-    <div id="display-area" class="chart-display-area">
-        <div id="chart-container"></div>
-    </div>
+        let score = 0;
+        let currentQuestion = null;
 
-    <div class="bottom-quiz-section">
-        <div id="feedback"></div>
-        <div id="question">?</div>
-        <div class="input-wrapper">
-            <input type="text" id="answer-input" placeholder="Type Romaji..." autocomplete="off">
-            <div>
-                <button id="check-btn" class="action-btn" onclick="check()">OK</button>
-                <button id="next-btn" class="action-btn" onclick="nextQuestion()">NEXT</button>
-            </div>
-        </div>
-    </div>
-</div>
+        const inputField = document.getElementById('type-input');
+        const targetField = document.getElementById('target-ja');
+        const resultField = document.getElementById('result-text');
+        const scoreField = document.getElementById('score-count');
 
-<script>
-    const dataGroups = {
-        basic: [
-            { label: "あ", data: [[0,0,"あ","a"],[0,1,"い","i"],[0,2,"う","u"],[0,3,"え","e"],[0,4,"お","o"]] },
-            { label: "か", data: [[1,0,"か","ka"],[1,1,"き","ki"],[1,2,"く","ku"],[1,3,"け","ke"],[1,4,"こ","ko"]] },
-            { label: "さ", data: [[2,0,"さ","sa"],[2,1,"し","shi"],[2,2,"す","su"],[2,3,"せ","se"],[2,4,"そ","so"]] },
-            { label: "た", data: [[3,0,"た","ta"],[3,1,"ち","chi"],[3,2,"つ","tsu"],[3,3,"て","te"],[3,4,"と","to"]] },
-            { label: "な", data: [[4,0,"な","na"],[4,1,"に","ni"],[4,2,"ぬ","nu"],[4,3,"ね","ne"],[4,4,"の","no"]] },
-            { label: "は", data: [[5,0,"は","ha"],[5,1,"ひ","hi"],[5,2,"ふ","fu"],[5,3,"へ","he"],[5,4,"ほ","ho"]] },
-            { label: "ま", data: [[6,0,"ま","ma"],[6,1,"み","mi"],[6,2,"む","mu"],[6,3,"め","me"],[6,4,"も","mo"]] },
-            { label: "や", data: [[7,0,"や","ya"],[7,2,"ゆ","yu"],[7,4,"よ","yo"]] },
-            { label: "ら", data: [[8,0,"ら","ra"],[8,1,"り","ri"],[8,2,"る","ru"],[8,3,"れ","re"],[8,4,"ろ","ro"]] },
-            { label: "わ", data: [[9,0,"わ","wa"],[9,2,"を","wo"],[9,4,"ん","nn"]] },
-            { label: "が", data: [[11,0,"が","ga"],[11,1,"ぎ","gi"],[11,2,"ぐ","gu"],[11,3,"げ","ge"],[11,4,"ご","go"]] },
-            { label: "ざ", data: [[12,0,"ざ","za"],[12,1,"じ","ji"],[12,2,"ず","zu"],[12,3,"ぜ","ze"],[12,4,"ぞ","zo"]] },
-            { label: "だ", data: [[13,0,"だ","da"],[13,1,"ぢ","ji"],[13,2,"づ","zu"],[13,3,"で","de"],[13,4,"ど","do"]] },
-            { label: "ば", data: [[14,0,"ば","ba"],[14,1,"び","bi"],[14,2,"ぶ","bu"],[14,3,"べ","be"],[14,4,"ぼ","bo"]] },
-            { label: "ぱ", data: [[15,0,"ぱ","pa"],[15,1,"ぴ","pi"],[15,2,"ぷ","pu"],[15,3,"ぺ","pe"],[15,4,"ぽ","po"]] }
-        ],
-        contracted: [
-            { label: "きゃ", data: [[0,0,"きゃ","kya"],[0,2,"きゅ","kyu"],[0,4,"きょ","kyo"]] },
-            { label: "しゃ", data: [[1,0,"しゃ","sha"],[1,2,"しゅ","shu"],[1,4,"しょ","sho"]] },
-            { label: "ちゃ", data: [[2,0,"ちゃ","cha"],[2,2,"ちゅ","chu"],[2,4,"ちょ","cho"]] },
-            { label: "にゃ", data: [[3,0,"にゃ","nya"],[3,2,"にゅ","nyu"],[3,4,"にょ","nyo"]] },
-            { label: "ひゃ", data: [[4,0,"ひゃ","hya"],[4,2,"ひゅ","hyu"],[4,4,"ひょ","hyo"]] },
-            { label: "みゃ", data: [[5,0,"みゃ","mya"],[5,2,"みゅ","myu"],[5,4,"みょ","myo"]] },
-            { label: "りゃ", data: [[6,0,"りゃ","rya"],[6,2,"りゅ","ryu"],[6,4,"りょ","ryo"]] },
-            { label: "ぎゃ", data: [[8,0,"ぎゃ","gya"],[8,2,"ぎゅ","gyu"],[8,4,"ぎょ","gyo"]] },
-            { label: "じゃ", data: [[9,0,"じゃ","ja"],[9,2,"じゅ","ju"],[9,4,"じょ","jo"]] },
-            { label: "びゃ", data: [[10,0,"びゃ","bya"],[10,2,"びゅ","byu"],[10,4,"びょ","byo"]] },
-            { label: "ぴゃ", data: [[11,0,"ぴゃ","pya"],[11,2,"ぴゅ","pyu"],[11,4,"ぴょ","pyo"]] }
-        ],
-    foreign: [
-        { label: "ふぁ", data: [[0,0,"ふぁ","fa"],[0,1,"ふぃ","fi"],[0,3,"ふぇ","fe"],[0,4,"ふぉ","fo"]] },
-        { label: "てぃ", data: [[1,1,"てぃ","thi"]] },
-        { label: "ちぇ", data: [[2,3,"ちぇ","che"]] },
-        { label: "でぃ", data: [[3,1,"でぃ","dhi"],[3,2,"でゅ","dhu"]] },
-        { label: "じぇ", data: [[5,3,"じぇ","je"],[6,3,"しぇ","she"]] },
-        { label: "ゔぁ", data: [[8,0,"ゔぁ","va"],[8,1,"ゔぃ","vi"],[8,2,"ゔ","vu"],[8,3,"ゔぇ","ve"],[8,4,"ゔぉ","vo"]] },
-        { label: "うぃ", data: [[9,1,"うぃ","wi"],[9,3,"うぇ","we"],[9,4,"うぉ","who"]] }
-    ]
-};
-
-    let isChallengeMode = false;
-    let currentQ = null;
-
-    function init() {
-        for (const cat in dataGroups) {
-            const container = document.getElementById(`chips-${cat}`);
-            dataGroups[cat].forEach((group, idx) => {
-                const label = document.createElement('label');
-                label.className = 'chip';
-                const checked = (cat === 'basic' && idx === 0) ? 'checked' : '';
-                label.innerHTML = `<input type="checkbox" data-cat="${cat}" data-idx="${idx}" ${checked} onchange="updateView()"> ${group.label}`;
-                container.appendChild(label);
-            });
+        // 問題をランダムに出す
+        function nextQuestion() {
+            const categories = gameData.foreign;
+            const randomCat = categories[Math.floor(Math.random() * categories.length)];
+            const randomItem = randomCat.data[Math.floor(Math.random() * randomCat.data.length)];
+            
+            currentQuestion = { ja: randomItem[2], en: randomItem[3] };
+            targetField.innerText = currentQuestion.ja;
+            inputField.value = "";
         }
-        updateView();
-    }
 
-    function selectAll(bool) {
-        document.querySelectorAll('.chip input').forEach(input => input.checked = bool);
-        updateView();
-    }
-
-    function selectOnly(targetCat) {
-        document.querySelectorAll('.chip input').forEach(input => {
-            input.checked = (input.dataset.cat === targetCat);
-        });
-        updateView();
-    }
-
-    function toggleChallenge() {
-        isChallengeMode = !isChallengeMode;
-        const btn = document.getElementById('challenge-btn');
-        btn.innerText = isChallengeMode ? "Hide Chart: YES" : "Hide Chart: OFF";
-        document.getElementById('display-area').classList.toggle('challenge-mode-active', isChallengeMode);
-    }
-
-    function updateView() {
-        const container = document.getElementById('chart-container');
-        container.innerHTML = "";
-        const selected = getSelectedData();
-        if (selected.length === 0) {
-            container.innerHTML = "<p style='font-size:12px; color:gray; padding:20px;'>Please select a row to practice.</p>";
-            document.getElementById('question').innerText = "?";
-            return;
-        }
-        const activeCats = [...new Set(selected.map(s => s.cat))];
-        activeCats.forEach(cat => {
-            const catSelected = selected.filter(s => s.cat === cat);
-            const list = catSelected.flatMap(s => s.data);
-            const maxCol = Math.max(...list.map(d => d[0]));
-            const minCol = Math.min(...list.map(d => d[0]));
-            const labels = (cat === 'contracted') ? ["ya","","yu","","yo"] : ["a","i","u","e","o"];
-            let html = `<table>`;
-            for (let r = 0; r < 5; r++) {
-                html += `<tr><td class="vowel-label">${labels[r]}</td>`;
-                for (let c = minCol; c <= maxCol; c++) {
-                    const item = list.find(d => d[0] === c && d[1] === r);
-                    if (item) {
-                        html += `<td id="cell-${cat}-${c}-${r}"><span class="kana">${item[2]}</span><span class="romaji">${item[3]}</span></td>`;
-                    } else {
-                        html += '<td class="empty-col" style="border:none;background:none;"></td>';
-                    }
+        // 入力をチェックする
+        inputField.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const userIn = inputField.value.toLowerCase().trim();
+                
+                if (userIn === currentQuestion.en) {
+                    // 正解！
+                    score++;
+                    scoreField.innerText = score;
+                    resultField.innerText = "Correct✨";
+                    resultField.className = "result-message correct";
+                    nextQuestion();
+                } else {
+                    // 間違い
+                    resultField.innerText = "Check the chart⚠️";
+                    resultField.className = "result-message wrong";
+                    inputField.value = "";
                 }
-                html += '</tr>';
             }
-            container.innerHTML += html + "</table>";
         });
+
+        // 最初に一問出す
         nextQuestion();
-    }
-
-    function getSelectedData() {
-        const inputs = document.querySelectorAll('.chip input:checked');
-        return Array.from(inputs).map(input => {
-            const cat = input.dataset.cat;
-            const idx = input.dataset.idx;
-            return { cat: cat, data: dataGroups[cat][idx].data };
-        });
-    }
-
-    function nextQuestion() {
-        const selected = getSelectedData();
-        if (selected.length === 0) return;
-        const randomGroup = selected[Math.floor(Math.random() * selected.length)];
-        const randomItem = randomGroup.data[Math.floor(Math.random() * randomGroup.data.length)];
-        currentQ = { cat: randomGroup.cat, data: randomItem };
-        document.getElementById('question').innerText = currentQ.data[2];
-        const input = document.getElementById('answer-input');
-        input.value = ''; input.disabled = false; input.focus();
-        document.getElementById('feedback').innerText = '';
-        document.getElementById('next-btn').style.display = 'none';
-        document.getElementById('check-btn').style.display = 'inline-block';
-        document.querySelectorAll('td').forEach(td => td.classList.remove('target-cell', 'show-cell'));
-    }
-
-    function check() {
-        const val = document.getElementById('answer-input').value.toLowerCase().trim();
-        const kana = currentQ.data[2];
-        const ans = currentQ.data[3];
-        const isCorrect = (val === ans) || 
-            (kana === 'し' && val === 'si') || (kana === 'ち' && val === 'ti') || 
-            (kana === 'つ' && val === 'tu') || (kana === 'ふ' && val === 'hu') ||
-            (kana === 'じ' && (val === 'zi' || val === 'ji')) ||
-            (kana === 'じゃ' && val === 'zya') || (kana === 'じゅ' && val === 'zyu') || (kana === 'じょ' && val === 'zyo') ||
-            (kana === 'を' && val === 'o');
-        const cellId = `cell-${currentQ.cat}-${currentQ.data[0]}-${currentQ.data[1]}`;
-        const targetCell = document.getElementById(cellId);
-        if (isCorrect) {
-            document.getElementById('feedback').innerText = 'Correct! ✨';
-            document.getElementById('feedback').style.color = 'var(--accent-pink)';
-            document.getElementById('answer-input').disabled = true;
-            document.getElementById('check-btn').style.display = 'none';
-            document.getElementById('next-btn').style.display = 'inline-block';
-            document.getElementById('next-btn').focus();
-            if (targetCell) {
-                targetCell.classList.add('target-cell', 'show-cell');
-                targetCell.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        } else {
-            document.getElementById('feedback').innerText = 'Check the chart! 💡';
-            document.getElementById('feedback').style.color = '#ff6347';
-            if (targetCell) {
-                targetCell.classList.add('target-cell', 'show-cell');
-                targetCell.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
-    }
-
-    document.getElementById('answer-input').onkeydown = function(e) {
-        if (e.key === 'Enter') {
-            if (document.getElementById('next-btn').style.display === 'inline-block') nextQuestion();
-            else check();
-        }
-    };
-    init();
-</script>
+    </script>
 </body>
 </html>
