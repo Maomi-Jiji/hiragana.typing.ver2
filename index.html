@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hiragana Master - Flexible Input</title>
+    <title>Hiragana Master - Final Labels</title>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -116,7 +116,7 @@
             <button class="small-btn" onclick="setAll(true)">All ON</button>
             <button class="small-btn" onclick="setAll(false)">All OFF</button>
             <button class="small-btn" onclick="setOnly('basic')">STEP 1: Basic</button>
-            <button class="small-btn" onclick="setOnly('contracted')">STEP 2: contracted</button>
+            <button class="small-btn" onclick="setOnly('contracted')">STEP 2: Contracted</button>
             <button class="small-btn" onclick="setOnly('foreign')">STEP 3: Foreign</button>
         </div>
     </div>
@@ -124,7 +124,7 @@
     <div class="selector-section">
         <span class="category-title">STEP 1: Basic</span>
         <div id="chips-basic" class="chips-container"></div>
-        <span class="category-title">STEP 2: contracted</span>
+        <span class="category-title">STEP 2: Contracted</span>
         <div id="chips-contracted" class="chips-container"></div>
         <span class="category-title">STEP 3: Foreign</span>
         <div id="chips-foreign" class="chips-container"></div>
@@ -273,7 +273,6 @@
         const kana = activeQ.data[2];
         const romaji = activeQ.data[3];
 
-        // 柔軟な判定ロジック
         let ok = (val === romaji);
         if (!ok) {
             const alt = {
@@ -320,4 +319,3 @@
 </script>
 </body>
 </html>
-
