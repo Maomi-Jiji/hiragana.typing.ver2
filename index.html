@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>Hiragana Typing</title>
+    <title>カタカナタイピング練習</title>
     <style>
         body { text-align: center; font-family: 'Segoe UI', sans-serif; padding-top: 50px; background-color: #f9f9f9; }
         .question-box { background: white; padding: 30px; border-radius: 15px; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
@@ -26,7 +26,7 @@
     </div>
 
     <script>
-        // あなたが修正したデータ
+        // ★あなたが自分で修正したデータ★
         const gameData = {
             foreign: [
                 { label: "ふぁ", data: [[0,0,"ふぁ","fa"],[0,1,"ふぃ","fi"],[0,3,"ふぇ","fe"],[0,4,"ふぉ","fo"]] },
@@ -47,39 +47,40 @@
         const resultField = document.getElementById('result-text');
         const scoreField = document.getElementById('score-count');
 
-        // 問題をランダムに出す
+        // 問題をランダムに出す関数
         function nextQuestion() {
             const categories = gameData.foreign;
             const randomCat = categories[Math.floor(Math.random() * categories.length)];
             const randomItem = randomCat.data[Math.floor(Math.random() * randomCat.data.length)];
             
+            // 日本語(index 2)と英語(index 3)を取得
             currentQuestion = { ja: randomItem[2], en: randomItem[3] };
             targetField.innerText = currentQuestion.ja;
             inputField.value = "";
         }
 
-        // 入力をチェックする
+        // 入力をチェックする機能
         inputField.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 const userIn = inputField.value.toLowerCase().trim();
                 
                 if (userIn === currentQuestion.en) {
-                    // 正解！
+                    // 正解のときの処理
                     score++;
                     scoreField.innerText = score;
-                    resultField.innerText = "Correct⭐
+                    resultField.innerText = "Correct! ✨";
                     resultField.className = "result-message correct";
-                    nextQuestion();
+                    nextQuestion(); // 次の問題へ
                 } else {
-                    // 間違い
-                    resultField.innerText = "Check the chart⚠️";
+                    // 間違いのときの処理
+                    resultField.innerText = "Check the chart! 💡";
                     resultField.className = "result-message wrong";
-                    inputField.value = "";
+                    inputField.value = ""; // 入力をやり直し
                 }
             }
         });
 
-        // 最初に一問出す
+        // ページを開いたときに最初の一問を出す
         nextQuestion();
     </script>
 </body>
