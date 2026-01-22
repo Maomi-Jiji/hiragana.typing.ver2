@@ -107,17 +107,23 @@
             border-color: var(--primary-pink);
         }
 
-       .chart-area { 
+    .chart-area { 
     flex: 1; 
     overflow-y: auto; 
     display: flex; 
     flex-direction: column;
     align-items: center;
-    /* justify-content: center;  ← もしこれがあれば削除 */
-    justify-content: flex-start; /* 表を上に寄せる */
+    /* justify-content: flex-start で上寄せを確定させる */
+    justify-content: flex-start !important; 
     background: #fafafa;
     border-radius: 12px;
-    padding: 2px 0; /* 15pxから2pxに減らして、上の隙間をギリギリまで詰める */
+    /* padding-topを0にして、隙間を完全に消す */
+    padding: 0px 0 2px 0; 
+}
+
+/* tableそのものに上マージンを設定して位置を微調整 */
+.chart-area table {
+    margin-top: 0px; /* ここを 0 にすれば一番上、少し開けるなら 5px 等で調整 */
 }
         
         table { border-collapse: separate; border-spacing: 4px; margin-bottom: 20px; }
@@ -368,4 +374,5 @@
 </script>
 </body>
 </html>
+
 
